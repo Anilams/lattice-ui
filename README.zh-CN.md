@@ -104,6 +104,8 @@ node scripts/install.mjs data-table detail-panel --target ../my-app
 
 本地安装器默认写入 <code>src</code>。源码在项目根目录时使用 <code>--src .</code>。它复制源码并打印 npm 依赖命令，不会自动运行包管理器。冲突会在任何文件写入前中止，缺失依赖会返回非零退出码。参数与接入配置见 [docs/registry.md](docs/registry.md)。
 
+Fork 后应把 <code>LATTICE_REGISTRY_URL</code> 指向自己的 Pages registry，重新生成，并替换安装示例中的上游仓库地址。上游专用的 drift 检查在 fork 中会跳过。
+
 ## 30 秒示例
 
 ~~~tsx

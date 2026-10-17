@@ -14,15 +14,15 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
-env:
-  LATTICE_REGISTRY_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/r
-
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set registry URL
+        run: echo "LATTICE_REGISTRY_URL=https://$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]').github.io/${{ github.event.repository.name }}/r" >> "$GITHUB_ENV"
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
@@ -56,6 +56,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set registry URL
+        run: echo "LATTICE_REGISTRY_URL=https://$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]').github.io/${{ github.event.repository.name }}/r" >> "$GITHUB_ENV"
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v4

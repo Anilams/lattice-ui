@@ -126,6 +126,7 @@ This validates the registry shape and a production consumer build for the tested
 6. Repeat the shadcn CLI install and a consumer production build against a pinned version directory.
 7. Keep the preview /r channel or cut a versioned registry URL; do not use bare generic names that could resolve to an unrelated upstream component.
 8. Confirm the MIT license and complete a name/trademark review before a stable release.
+9. Keep the Pages verify job (typecheck, registry drift, library build) ahead of the deploy job.
 
 ## Versioning
 

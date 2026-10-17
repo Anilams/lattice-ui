@@ -104,6 +104,8 @@ node scripts/install.mjs data-table detail-panel --target ../my-app
 
 The local installer writes under <code>src</code> by default. Use <code>--src .</code> for a root-level source tree. It copies source files and prints the npm dependency command; it does not run the package manager. Conflicts abort before any file is written; a missing dependency exits non-zero. See [docs/registry.md](docs/registry.md) for flags and consumer setup.
 
+Forks should set <code>LATTICE_REGISTRY_URL</code> to their own Pages registry, regenerate, and replace the upstream repository URL in the install examples. The upstream-only drift check is skipped on forks.
+
 ## 30-second example
 
 ~~~tsx
