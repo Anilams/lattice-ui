@@ -4,7 +4,11 @@ import { fileURLToPath } from 'node:url'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = path.join(root, 'public', 'r')
-const registryBase = (process.env.LATTICE_REGISTRY_URL ?? 'https://anilams.github.io/lattice-ui/r').replace(/\/$/, '')
+const registryUrl = new URL(
+  process.env.LATTICE_REGISTRY_URL ?? 'https://anilams.github.io/lattice-ui/r',
+)
+registryUrl.hostname = registryUrl.hostname.toLowerCase()
+const registryBase = registryUrl.toString().replace(/\/$/, '')
 
 const ui = [
   ['button', 'Button', 'Primary, secondary, ghost, danger and link actions with loading state.', ['utils'], ['class-variance-authority', 'lucide-react']],
