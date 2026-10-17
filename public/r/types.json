@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "types",
+  "type": "registry:lib",
+  "title": "Console types",
+  "description": "Device, WAN, traffic, topology and activity data shapes.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/components/console/types.ts",
+      "target": "components/console/types.ts",
+      "type": "registry:lib",
+      "content": "export type DeviceStatus = 'online' | 'warning' | 'offline'\nexport type DeviceKind = 'gateway' | 'switch' | 'ap' | 'client' | 'camera' | 'server'\n\nexport type Device = {\n  id: string\n  name: string\n  model: string\n  kind: DeviceKind\n  status: DeviceStatus\n  ip: string\n  mac: string\n  uplink: string\n  parent: string\n  port?: string\n  clients: number\n  uptime: string\n  firmware: string\n  memory: number\n  cpu: number\n  location: string\n  band?: string\n  channel?: string\n  width?: string\n  ssid?: string\n  txRate?: string\n  rxRate?: string\n  channelUtilization?: number\n}\n\nexport type Wan = {\n  id: 'primary' | 'secondary'\n  name: string\n  isp: string\n  color: 'cyan' | 'violet'\n  ip: string\n  gateway: string\n  latency: number\n  jitter: number\n  loss: number\n  usage: string\n  speed: string\n  status: 'online' | 'warning'\n}\n\nexport type Range = '1h' | '1d' | '1w' | '1m'\n\nexport type TrafficPoint = {\n  t: number\n  download: number\n  upload: number\n}\n\nexport type TopologyNode = {\n  id: string\n  label: string\n  sublabel: string\n  x: number\n  y: number\n  kind: DeviceKind\n  status: DeviceStatus\n  meta: string\n}\n\nexport type ActivityItem = {\n  id: string\n  time: string\n  title: string\n  detail: string\n  tone: 'online' | 'warning' | 'info' | 'neutral'\n}\n\nexport type DevicePort = {\n  number: number\n  label: string\n  connected: boolean\n  speed?: string\n  poe?: boolean\n}\n\nexport type DeviceTraffic = {\n  download: number[]\n  upload: number[]\n}\n\nexport type DeviceEvent = {\n  time: string\n  title: string\n  detail: string\n}\n"
+    }
+  ]
+}

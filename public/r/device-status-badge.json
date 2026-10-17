@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "device-status-badge",
+  "type": "registry:block",
+  "title": "DeviceStatusBadge",
+  "description": "Online, warning and offline labels.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/badge.json",
+    "https://anilams.github.io/lattice-ui/r/types.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/device-status-badge.tsx",
+      "target": "components/console/device-status-badge.tsx",
+      "type": "registry:block",
+      "content": "import type { DeviceStatus } from './types'\nimport { Badge } from '@/components/ui/badge'\n\nconst labels: Record<DeviceStatus, string> = {\n  online: '在线',\n  warning: '注意',\n  offline: '离线',\n}\n\nexport function DeviceStatusBadge({ status }: { status: DeviceStatus }) {\n  return (\n    <Badge tone={status === 'online' ? 'success' : status === 'warning' ? 'warning' : 'danger'} dot>\n      {labels[status]}\n    </Badge>\n  )\n}\n"
+    }
+  ]
+}

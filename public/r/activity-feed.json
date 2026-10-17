@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "activity-feed",
+  "type": "registry:block",
+  "title": "ActivityFeed",
+  "description": "Timestamped activity stream accepting caller data.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/icon-button.json",
+    "https://anilams.github.io/lattice-ui/r/panel.json",
+    "https://anilams.github.io/lattice-ui/r/status-dot.json",
+    "https://anilams.github.io/lattice-ui/r/types.json",
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/activity-feed.tsx",
+      "target": "components/console/activity-feed.tsx",
+      "type": "registry:block",
+      "content": "import { MoreHorizontal } from 'lucide-react'\nimport type { ActivityItem } from './types'\nimport { cn } from '@/lib/utils'\nimport { Panel, PanelHeader } from '@/components/ui/panel'\nimport { IconButton } from '@/components/ui/icon-button'\nimport { StatusDot } from '@/components/ui/status-dot'\n\nconst toneMap: Record<string, 'online' | 'warning' | 'info' | 'neutral'> = {\n  online: 'online',\n  warning: 'warning',\n  info: 'info',\n  neutral: 'neutral',\n}\n\nexport function ActivityFeed({ items, className }: { items: ActivityItem[]; className?: string }) {\n  return (\n    <Panel className={cn('flex min-h-0 flex-col', className)}>\n      <PanelHeader\n        title=\"最近活动\"\n        actions={\n          <IconButton label=\"活动菜单\" size=\"sm\">\n            <MoreHorizontal className=\"size-3.5\" />\n          </IconButton>\n        }\n      />\n      <div className=\"min-h-0 flex-1 overflow-y-auto\">\n        {items.length ? items.map((activity) => (\n          <div key={activity.id} className=\"flex gap-2.5 border-b border-line-faint px-3.5 py-2.5 last:border-b-0\">\n            <span className=\"lat-data mt-0.5 w-8 shrink-0 text-[10px] tabular-nums text-faint\">{activity.time}</span>\n            <StatusDot status={toneMap[activity.tone]} className=\"mt-1.5\" />\n            <div className=\"min-w-0\">\n              <div className=\"truncate text-[var(--lat-text-xs)] leading-4 text-ink\">{activity.title}</div>\n              <div className=\"mt-0.5 truncate text-[10px] text-faint\">{activity.detail}</div>\n            </div>\n          </div>\n        )) : (\n          <div className=\"px-3.5 py-8 text-center text-[10px] text-faint\">暂无活动记录</div>\n        )}\n      </div>\n      <div className=\"border-t border-line px-3.5 py-2\">\n        <button className=\"text-[10px] text-action hover:text-action-hover\">查看全部活动</button>\n      </div>\n    </Panel>\n  )\n}\n"
+    }
+  ]
+}

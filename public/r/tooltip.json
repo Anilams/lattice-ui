@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "type": "registry:ui",
+  "title": "Tooltip",
+  "description": "Portal tooltip with collision handling.",
+  "dependencies": [
+    "@radix-ui/react-tooltip"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/tooltip.tsx",
+      "target": "components/ui/tooltip.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport * as TooltipPrimitive from '@radix-ui/react-tooltip'\nimport { cn } from '@/lib/utils'\n\nexport const TooltipProvider = ({\n  children,\n  delayDuration = 380,\n}: {\n  children: React.ReactNode\n  delayDuration?: number\n}) => (\n  <TooltipPrimitive.Provider delayDuration={delayDuration} skipDelayDuration={250}>\n    {children}\n  </TooltipPrimitive.Provider>\n)\n\nexport const Tooltip = TooltipPrimitive.Root\nexport const TooltipTrigger = TooltipPrimitive.Trigger\n\nexport const TooltipContent = React.forwardRef<\n  React.ElementRef<typeof TooltipPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>\n>(({ className, sideOffset = 6, ...props }, ref) => (\n  <TooltipPrimitive.Portal>\n    <TooltipPrimitive.Content\n      ref={ref}\n      sideOffset={sideOffset}\n      collisionPadding={12}\n      className={cn(\n        'lat-tooltip-content z-[var(--lat-z-tooltip)] max-w-64 rounded-[var(--lat-radius-sm)] border border-line-strong bg-overlay px-2 py-1.5 text-[var(--lat-text-xs)] leading-4 text-ink shadow-[var(--lat-shadow-panel)]',\n        className,\n      )}\n      {...props}\n    />\n  </TooltipPrimitive.Portal>\n))\nTooltipContent.displayName = 'TooltipContent'\n"
+    }
+  ]
+}

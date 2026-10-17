@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist-lib",
+    "rootDir": "src",
+    "stripInternal": true
+  },
+  "include": ["src/index.ts", "src/components/**/*.ts", "src/components/**/*.tsx", "src/lib/**/*.ts"],
+  "exclude": ["src/pages", "src/App.tsx", "src/main.tsx"]
+}

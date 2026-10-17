@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "type": "registry:block",
+  "title": "EmptyState",
+  "description": "Empty result with teaching copy and optional action.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/empty-state.tsx",
+      "target": "components/console/empty-state.tsx",
+      "type": "registry:block",
+      "content": "import * as React from 'react'\nimport { PackageOpen } from 'lucide-react'\nimport { cn } from '@/lib/utils'\n\nexport function EmptyState({\n  title,\n  description,\n  action,\n  icon,\n  className,\n}: {\n  title: string\n  description?: string\n  action?: React.ReactNode\n  icon?: React.ReactNode\n  className?: string\n}) {\n  return (\n    <div className={cn('flex min-h-[240px] flex-col items-center justify-center px-6 py-10 text-center', className)}>\n      <div className=\"flex size-10 items-center justify-center rounded-[var(--lat-radius-lg)] border border-line bg-raised text-faint\">\n        {icon ?? <PackageOpen className=\"size-4\" />}\n      </div>\n      <div className=\"mt-3 text-[var(--lat-text-sm)] font-medium text-ink\">{title}</div>\n      {description ? <div className=\"mt-1 max-w-[40ch] text-[var(--lat-text-xs)] leading-4 text-faint\">{description}</div> : null}\n      {action ? <div className=\"mt-4\">{action}</div> : null}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

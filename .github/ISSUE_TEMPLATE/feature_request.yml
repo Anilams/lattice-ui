@@ -1,0 +1,28 @@
+name: Feature request
+description: Propose a component, pattern or accessibility improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What operational problem does this solve?
+      description: Describe the user, task and context rather than only the desired control.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Include states, keyboard behavior and data shape if relevant.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: This is a reusable pattern, not a one-off page.
+        - label: I can help test it in a consumer project.

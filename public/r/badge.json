@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "type": "registry:ui",
+  "title": "Badge",
+  "description": "Compact semantic status label.",
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/badge.tsx",
+      "target": "components/ui/badge.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport { cva, type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\n\nconst badgeVariants = cva(\n  'inline-flex w-fit items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[var(--lat-text-2xs)] font-medium leading-none',\n  {\n    variants: {\n      tone: {\n        neutral: 'border-line bg-raised text-muted',\n        action: 'border-action/25 bg-action-soft text-action',\n        success: 'border-success/25 bg-success-soft text-success',\n        warning: 'border-warning/25 bg-warning-soft text-warning',\n        danger: 'border-danger/25 bg-danger-soft text-danger',\n        info: 'border-info/25 bg-info-soft text-info',\n      },\n    },\n    defaultVariants: {\n      tone: 'neutral',\n    },\n  },\n)\n\nexport interface BadgeProps\n  extends React.HTMLAttributes<HTMLSpanElement>,\n    VariantProps<typeof badgeVariants> {\n  dot?: boolean\n}\n\nexport function Badge({ className, tone, dot = false, children, ...props }: BadgeProps) {\n  return (\n    <span className={cn(badgeVariants({ tone }), className)} {...props}>\n      {dot ? <span className=\"size-1.5 rounded-full bg-current\" aria-hidden=\"true\" /> : null}\n      {children}\n    </span>\n  )\n}\n\nexport { badgeVariants }\n"
+    }
+  ]
+}

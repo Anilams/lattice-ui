@@ -1,0 +1,229 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "lattice",
+  "homepage": "https://anilams.github.io/lattice-ui/",
+  "items": [
+    {
+      "name": "theme",
+      "type": "registry:theme",
+      "title": "Lattice theme",
+      "description": "Primitive and semantic tokens for dark, light and density modes."
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utilities",
+      "description": "Class merging and compact number helpers."
+    },
+    {
+      "name": "types",
+      "type": "registry:lib",
+      "title": "Console types",
+      "description": "Device, WAN, traffic, topology and activity data shapes."
+    },
+    {
+      "name": "control",
+      "type": "registry:lib",
+      "title": "Control styles",
+      "description": "Shared form-control and panel class recipes."
+    },
+    {
+      "name": "brand",
+      "type": "registry:block",
+      "title": "Lattice brand mark",
+      "description": "Independent geometric mark and wordmark for the demo shell."
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Primary, secondary, ghost, danger and link actions with loading state."
+    },
+    {
+      "name": "icon-button",
+      "type": "registry:ui",
+      "title": "IconButton",
+      "description": "Square icon action with an accessible label."
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Compact semantic status label."
+    },
+    {
+      "name": "status-dot",
+      "type": "registry:ui",
+      "title": "StatusDot",
+      "description": "Small status indicator with optional pulse."
+    },
+    {
+      "name": "panel",
+      "type": "registry:ui",
+      "title": "Panel",
+      "description": "Bordered surface with a compact header."
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Labeled input with hint, error and leading or trailing content."
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Radix checkbox with an enlarged hit area."
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Radix switch with label and description."
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Line and segmented tabs with keyboard navigation."
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Portal tooltip with collision handling."
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "DropdownMenu",
+      "description": "Accessible menu primitives with checkbox items."
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Radix select styled as a compact form control."
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Modal dialog with focus management and Escape handling."
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "Left, right or bottom drawer built on Radix Dialog."
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Horizontal or vertical divider."
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Loading placeholder with reduced-motion support."
+    },
+    {
+      "name": "inline-notice",
+      "type": "registry:ui",
+      "title": "InlineNotice",
+      "description": "Inline info, success, warning and danger message."
+    },
+    {
+      "name": "page",
+      "type": "registry:block",
+      "title": "Page primitives",
+      "description": "Page header, body and toolbar."
+    },
+    {
+      "name": "health-strip",
+      "type": "registry:block",
+      "title": "HealthStrip",
+      "description": "Compact operational health summary."
+    },
+    {
+      "name": "device-glyph",
+      "type": "registry:block",
+      "title": "DeviceGlyph",
+      "description": "Device kind glyph with status indicator."
+    },
+    {
+      "name": "device-status-badge",
+      "type": "registry:block",
+      "title": "DeviceStatusBadge",
+      "description": "Online, warning and offline labels."
+    },
+    {
+      "name": "sparkline",
+      "type": "registry:block",
+      "title": "Sparkline",
+      "description": "Dependency-free sparkline for compact telemetry."
+    },
+    {
+      "name": "traffic-chart",
+      "type": "registry:block",
+      "title": "TrafficChart",
+      "description": "Keyboard-inspectable SVG traffic chart with two series."
+    },
+    {
+      "name": "traffic-panel",
+      "type": "registry:block",
+      "title": "TrafficPanel",
+      "description": "Chart panel with range and series controls."
+    },
+    {
+      "name": "topology-map",
+      "type": "registry:block",
+      "title": "TopologyMap",
+      "description": "Interactive network topology with keyboard-selectable nodes."
+    },
+    {
+      "name": "filter-panel",
+      "type": "registry:block",
+      "title": "FilterPanel",
+      "description": "Search and grouped filters for dense lists."
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:block",
+      "title": "EmptyState",
+      "description": "Empty result with teaching copy and optional action."
+    },
+    {
+      "name": "data-table",
+      "type": "registry:block",
+      "title": "DataTable",
+      "description": "Sortable, selectable table with responsive column hiding."
+    },
+    {
+      "name": "settings-section",
+      "type": "registry:block",
+      "title": "SettingsSection",
+      "description": "Collapsible settings group and key-value rows."
+    },
+    {
+      "name": "activity-feed",
+      "type": "registry:block",
+      "title": "ActivityFeed",
+      "description": "Timestamped activity stream accepting caller data."
+    },
+    {
+      "name": "detail-panel",
+      "type": "registry:block",
+      "title": "DetailPanel",
+      "description": "Non-modal desktop detail panel and modal mobile sheet."
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:block",
+      "title": "AppShell",
+      "description": "Console shell with rail, navigation, site switcher, command palette and theme controls."
+    }
+  ]
+}

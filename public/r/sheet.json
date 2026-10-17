@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sheet",
+  "type": "registry:ui",
+  "title": "Sheet",
+  "description": "Left, right or bottom drawer built on Radix Dialog.",
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/sheet.tsx",
+      "target": "components/ui/sheet.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport * as DialogPrimitive from '@radix-ui/react-dialog'\nimport { X } from 'lucide-react'\nimport { cva, type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\n\nconst sheetVariants = cva(\n  'lat-sheet-content fixed z-[var(--lat-z-dialog)] flex flex-col bg-surface text-ink shadow-[var(--lat-shadow-overlay)] outline-none',\n  {\n    variants: {\n      side: {\n        right: 'inset-y-0 right-0 w-[min(92vw,460px)] border-l border-line',\n        left: 'inset-y-0 left-0 w-[min(92vw,320px)] border-r border-line',\n        bottom: 'inset-x-0 bottom-0 max-h-[86vh] rounded-t-[var(--lat-radius-xl)] border-t border-line',\n      },\n    },\n    defaultVariants: { side: 'right' },\n  },\n)\n\nexport const Sheet = DialogPrimitive.Root\nexport const SheetTrigger = DialogPrimitive.Trigger\nexport const SheetClose = DialogPrimitive.Close\n\nexport const SheetContent = React.forwardRef<\n  React.ElementRef<typeof DialogPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> &\n    VariantProps<typeof sheetVariants>\n>(({ className, children, side, ...props }, ref) => (\n  <DialogPrimitive.Portal>\n    <DialogPrimitive.Overlay className=\"lat-overlay fixed inset-0 z-[var(--lat-z-overlay)] bg-[var(--lat-scrim)]\" />\n    <DialogPrimitive.Content\n      ref={ref}\n      data-side={side ?? 'right'}\n      className={cn(sheetVariants({ side }), className)}\n      {...props}\n    >\n      {children}\n      <DialogPrimitive.Close className=\"absolute right-3 top-3 flex size-7 items-center justify-center rounded-[var(--lat-radius-sm)] text-faint transition-colors hover:bg-hover hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/35\">\n        <X className=\"size-4\" />\n        <span className=\"sr-only\">关闭</span>\n      </DialogPrimitive.Close>\n    </DialogPrimitive.Content>\n  </DialogPrimitive.Portal>\n))\nSheetContent.displayName = 'SheetContent'\n\nexport function SheetHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return <div className={cn('flex flex-col gap-1 border-b border-line px-4 py-3.5 pr-12', className)} {...props} />\n}\n\nexport const SheetTitle = React.forwardRef<\n  React.ElementRef<typeof DialogPrimitive.Title>,\n  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>\n>(({ className, ...props }, ref) => (\n  <DialogPrimitive.Title\n    ref={ref}\n    className={cn('text-[var(--lat-text-md)] font-semibold text-ink', className)}\n    {...props}\n  />\n))\nSheetTitle.displayName = 'SheetTitle'\n\nexport const SheetDescription = React.forwardRef<\n  React.ElementRef<typeof DialogPrimitive.Description>,\n  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>\n>(({ className, ...props }, ref) => (\n  <DialogPrimitive.Description\n    ref={ref}\n    className={cn('text-[var(--lat-text-xs)] leading-4 text-faint', className)}\n    {...props}\n  />\n))\nSheetDescription.displayName = 'SheetDescription'\n\nexport function SheetBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return <div className={cn('min-h-0 flex-1 overflow-y-auto', className)} {...props} />\n}\n\nexport function SheetFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return <div className={cn('flex items-center gap-2 border-t border-line px-4 py-3', className)} {...props} />\n}\n"
+    }
+  ]
+}

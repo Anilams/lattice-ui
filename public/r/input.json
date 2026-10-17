@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "title": "Input",
+  "description": "Labeled input with hint, error and leading or trailing content.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/control.json",
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/input.tsx",
+      "target": "components/ui/input.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport { cn } from '@/lib/utils'\nimport { controlBase } from './control'\n\nexport interface InputProps\n  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {\n  label?: string\n  hint?: string\n  error?: string\n  leading?: React.ReactNode\n  trailing?: React.ReactNode\n  containerClassName?: string\n}\n\nexport const Input = React.forwardRef<HTMLInputElement, InputProps>(\n  (\n    {\n      className,\n      containerClassName,\n      label,\n      hint,\n      error,\n      leading,\n      trailing,\n      id,\n      required,\n      ...props\n    },\n    ref,\n  ) => {\n    const generatedId = React.useId()\n    const inputId = id ?? generatedId\n    const helpId = error ? inputId + '-error' : hint ? inputId + '-hint' : undefined\n\n    return (\n      <div className={cn('flex flex-col gap-1.5', containerClassName)}>\n        {label ? (\n          <label htmlFor={inputId} className=\"text-[var(--lat-text-xs)] font-medium text-muted\">\n            {label}\n            {required ? <span className=\"ml-1 text-danger\">*</span> : null}\n          </label>\n        ) : null}\n        <div\n          className={cn(\n            'group flex items-center gap-2 rounded-[var(--lat-radius-sm)] border border-line-strong bg-raised px-2.5 transition-[border-color,box-shadow] duration-[var(--lat-duration-fast)] focus-within:border-action focus-within:ring-2 focus-within:ring-action/25',\n            error && 'border-danger/70 focus-within:border-danger focus-within:ring-danger/20',\n            'h-[var(--lat-control-height)]',\n          )}\n        >\n          {leading ? <span className=\"shrink-0 text-faint\">{leading}</span> : null}\n          <input\n            ref={ref}\n            id={inputId}\n            required={required}\n            aria-invalid={error ? true : undefined}\n            aria-describedby={helpId}\n            className={cn(\n              'min-w-0 flex-1 bg-transparent text-[var(--lat-text-sm)] text-ink outline-none placeholder:text-faint focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',\n              className,\n            )}\n            {...props}\n          />\n          {trailing ? <span className=\"shrink-0 text-faint\">{trailing}</span> : null}\n        </div>\n        {error ? (\n          <p id={helpId} className=\"text-[var(--lat-text-xs)] text-danger\">\n            {error}\n          </p>\n        ) : hint ? (\n          <p id={helpId} className=\"text-[var(--lat-text-xs)] text-faint\">\n            {hint}\n          </p>\n        ) : null}\n      </div>\n    )\n  },\n)\nInput.displayName = 'Input'\n"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "dialog",
+  "type": "registry:ui",
+  "title": "Dialog",
+  "description": "Modal dialog with focus management and Escape handling.",
+  "dependencies": [
+    "@radix-ui/react-dialog",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/dialog.tsx",
+      "target": "components/ui/dialog.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport * as DialogPrimitive from '@radix-ui/react-dialog'\nimport { X } from 'lucide-react'\nimport { cn } from '@/lib/utils'\n\nexport const Dialog = DialogPrimitive.Root\nexport const DialogTrigger = DialogPrimitive.Trigger\nexport const DialogClose = DialogPrimitive.Close\n\nexport const DialogOverlay = React.forwardRef<\n  React.ElementRef<typeof DialogPrimitive.Overlay>,\n  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>\n>(({ className, ...props }, ref) => (\n  <DialogPrimitive.Overlay\n    ref={ref}\n    className={cn('lat-overlay fixed inset-0 z-[var(--lat-z-overlay)] bg-[var(--lat-scrim)]', className)}\n    {...props}\n  />\n))\nDialogOverlay.displayName = 'DialogOverlay'\n\nexport const DialogContent = React.forwardRef<\n  React.ElementRef<typeof DialogPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>\n>(({ className, children, ...props }, ref) => (\n  <DialogPrimitive.Portal>\n    <DialogOverlay />\n    <DialogPrimitive.Content\n      ref={ref}\n      className={cn(\n        'lat-dialog-content fixed left-1/2 top-1/2 z-[var(--lat-z-dialog)] max-h-[calc(100dvh-24px)] w-[min(calc(100vw-32px),520px)] overflow-y-auto overscroll-contain rounded-[var(--lat-radius-xl)] border border-line bg-overlay p-5 text-ink shadow-[var(--lat-shadow-overlay)]',\n        className,\n      )}\n      {...props}\n    >\n      {children}\n      <DialogPrimitive.Close className=\"absolute right-3 top-3 flex size-7 items-center justify-center rounded-[var(--lat-radius-sm)] text-faint transition-colors hover:bg-hover hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/35\">\n        <X className=\"size-4\" />\n        <span className=\"sr-only\">关闭</span>\n      </DialogPrimitive.Close>\n    </DialogPrimitive.Content>\n  </DialogPrimitive.Portal>\n))\nDialogContent.displayName = 'DialogContent'\n\nexport function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return <div className={cn('mb-4 flex flex-col gap-1 pr-7', className)} {...props} />\n}\n\nexport const DialogTitle = React.forwardRef<\n  React.ElementRef<typeof DialogPrimitive.Title>,\n  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>\n>(({ className, ...props }, ref) => (\n  <DialogPrimitive.Title\n    ref={ref}\n    className={cn('text-[var(--lat-text-lg)] font-semibold tracking-[-0.01em] text-ink', className)}\n    {...props}\n  />\n))\nDialogTitle.displayName = 'DialogTitle'\n\nexport const DialogDescription = React.forwardRef<\n  React.ElementRef<typeof DialogPrimitive.Description>,\n  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>\n>(({ className, ...props }, ref) => (\n  <DialogPrimitive.Description\n    ref={ref}\n    className={cn('text-[var(--lat-text-sm)] leading-5 text-muted', className)}\n    {...props}\n  />\n))\nDialogDescription.displayName = 'DialogDescription'\n\nexport function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return <div className={cn('mt-6 flex items-center justify-end gap-2', className)} {...props} />\n}\n"
+    }
+  ]
+}

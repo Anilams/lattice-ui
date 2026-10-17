@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "panel",
+  "type": "registry:ui",
+  "title": "Panel",
+  "description": "Bordered surface with a compact header.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/control.json",
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/panel.tsx",
+      "target": "components/ui/panel.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport { cn } from '@/lib/utils'\nimport { panelBase } from './control'\n\nexport function Panel({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return <div className={cn(panelBase, className)} {...props} />\n}\n\nexport function PanelHeader({\n  title,\n  description,\n  icon,\n  actions,\n  className,\n}: {\n  title: React.ReactNode\n  description?: React.ReactNode\n  icon?: React.ReactNode\n  actions?: React.ReactNode\n  className?: string\n}) {\n  return (\n    <div className={cn('flex min-h-11 items-center gap-3 border-b border-line px-3.5 py-2.5', className)}>\n      {icon ? <span className=\"shrink-0 text-faint\">{icon}</span> : null}\n      <div className=\"min-w-0 flex-1\">\n        <div className=\"truncate text-[var(--lat-text-sm)] font-medium text-ink\">{title}</div>\n        {description ? <div className=\"mt-0.5 text-[var(--lat-text-xs)] text-faint\">{description}</div> : null}\n      </div>\n      {actions ? <div className=\"flex shrink-0 items-center gap-1.5\">{actions}</div> : null}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

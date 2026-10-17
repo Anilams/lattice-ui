@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "status-dot",
+  "type": "registry:ui",
+  "title": "StatusDot",
+  "description": "Small status indicator with optional pulse.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/status-dot.tsx",
+      "target": "components/ui/status-dot.tsx",
+      "type": "registry:ui",
+      "content": "import { cn } from '@/lib/utils'\n\ntype Status = 'online' | 'warning' | 'offline' | 'info' | 'neutral'\n\nconst statusClass: Record<Status, string> = {\n  online: 'bg-success',\n  warning: 'bg-warning',\n  offline: 'bg-danger',\n  info: 'bg-action',\n  neutral: 'bg-[var(--lat-text-faint)]',\n}\n\nexport function StatusDot({\n  status = 'online',\n  pulse = false,\n  className,\n  label,\n}: {\n  status?: Status\n  pulse?: boolean\n  className?: string\n  label?: string\n}) {\n  return (\n    <span\n      role={label ? 'img' : undefined}\n      aria-label={label}\n      className={cn('relative inline-flex size-1.5 shrink-0 rounded-full', statusClass[status], className)}\n    >\n      {pulse ? (\n        <span\n          className={cn(\n            'absolute inset-0 rounded-full opacity-50',\n            statusClass[status],\n            'animate-[lat-pulse_2.8s_ease-in-out_infinite]',\n          )}\n          aria-hidden=\"true\"\n        />\n      ) : null}\n    </span>\n  )\n}\n"
+    }
+  ]
+}

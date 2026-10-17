@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "brand",
+  "type": "registry:block",
+  "title": "Lattice brand mark",
+  "description": "Independent geometric mark and wordmark for the demo shell.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/brand.tsx",
+      "target": "components/console/brand.tsx",
+      "type": "registry:block",
+      "content": "import { cn } from '@/lib/utils'\n\nexport function LatticeMark({ className }: { className?: string }) {\n  return (\n    <svg\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      aria-hidden=\"true\"\n      className={cn('size-[18px] shrink-0', className)}\n    >\n      <path d=\"M4 7h16M4 12h16M4 17h16M8 3v18M16 3v18\" stroke=\"currentColor\" strokeWidth=\"1\" opacity=\"0.5\" />\n      <path d=\"M8 7h8v10H8z\" stroke=\"currentColor\" strokeWidth=\"1.2\" />\n      <circle cx=\"8\" cy=\"7\" r=\"2.2\" fill=\"var(--lat-action)\" />\n      <circle cx=\"16\" cy=\"17\" r=\"2.2\" fill=\"var(--lat-series-1)\" />\n      <circle cx=\"16\" cy=\"7\" r=\"1.35\" fill=\"currentColor\" />\n      <circle cx=\"8\" cy=\"17\" r=\"1.35\" fill=\"currentColor\" />\n    </svg>\n  )\n}\n\nexport function Wordmark({ compact = false }: { compact?: boolean }) {\n  return (\n    <span className=\"flex items-baseline gap-1.5\">\n      <span className=\"text-[15px] font-semibold tracking-[-0.025em] text-ink\">Lattice</span>\n      {compact ? null : (\n        <span className=\"text-[10px] font-medium uppercase tracking-[0.16em] text-faint\">UI</span>\n      )}\n    </span>\n  )\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "type": "registry:lib",
+  "title": "Utilities",
+  "description": "Class merging and compact number helpers.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/theme.json"
+  ],
+  "files": [
+    {
+      "path": "src/lib/utils.ts",
+      "target": "lib/utils.ts",
+      "type": "registry:lib",
+      "content": "import { clsx, type ClassValue } from 'clsx'\nimport { twMerge } from 'tailwind-merge'\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n\nexport function formatCompact(n: number) {\n  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'\n  if (n >= 1_000) return (n / 1_000).toFixed(n >= 10_000 ? 0 : 1) + 'K'\n  return String(n)\n}\n\nexport function clamp(n: number, min: number, max: number) {\n  return Math.min(max, Math.max(min, n))\n}\n"
+    }
+  ]
+}

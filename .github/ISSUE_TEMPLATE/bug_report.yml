@@ -1,0 +1,56 @@
+name: Bug report
+description: Report a reproducible component or demo issue.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for the report. Please remove private data and credentials.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Include the expected behavior and the actual result.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: |
+        1. Open ...
+        2. Set theme/density ...
+        3. Press ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v0.1.0 or commit SHA
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme and density
+      options:
+        - Dark / compact
+        - Light / compact
+        - Dark / roomy
+        - Light / roomy
+        - Not theme-specific
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and viewport
+      placeholder: Chrome 155, 1440x792
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed private data and credentials.
+          required: true
+        - label: I checked the existing issues.
+          required: true

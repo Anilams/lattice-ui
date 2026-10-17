@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "type": "registry:ui",
+  "title": "Tabs",
+  "description": "Line and segmented tabs with keyboard navigation.",
+  "dependencies": [
+    "@radix-ui/react-tabs",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/tabs.tsx",
+      "target": "components/ui/tabs.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport * as TabsPrimitive from '@radix-ui/react-tabs'\nimport { cva, type VariantProps } from 'class-variance-authority'\nimport { cn } from '@/lib/utils'\n\ntype TabsVariant = 'line' | 'segmented'\nconst TabsVariantContext = React.createContext<TabsVariant>('line')\n\nconst tabsListVariants = cva('inline-flex items-center', {\n  variants: {\n    variant: {\n      line: 'gap-1 border-b border-line',\n      segmented: 'gap-0.5 rounded-[var(--lat-radius-md)] border border-line bg-raised p-0.5',\n    },\n  },\n  defaultVariants: { variant: 'line' },\n})\n\nexport interface TabsListProps\n  extends React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>,\n    VariantProps<typeof tabsListVariants> {}\n\nexport const TabsList = React.forwardRef<\n  React.ElementRef<typeof TabsPrimitive.List>,\n  TabsListProps\n>(({ className, variant = 'line', ...props }, ref) => (\n  <TabsVariantContext.Provider value={variant ?? 'line'}>\n    <TabsPrimitive.List\n      ref={ref}\n      className={cn(tabsListVariants({ variant }), className)}\n      {...props}\n    />\n  </TabsVariantContext.Provider>\n))\nTabsList.displayName = 'TabsList'\n\nexport const TabsTrigger = React.forwardRef<\n  React.ElementRef<typeof TabsPrimitive.Trigger>,\n  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>\n>(({ className, ...props }, ref) => {\n  const variant = React.useContext(TabsVariantContext)\n  return (\n    <TabsPrimitive.Trigger\n      ref={ref}\n      className={cn(\n        'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap text-[var(--lat-text-sm)] text-muted transition-[background-color,border-color,color,box-shadow] duration-[var(--lat-duration-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/35 disabled:pointer-events-none disabled:opacity-40',\n        variant === 'line' &&\n          '-mb-px h-[34px] border-b-2 border-transparent px-2 hover:text-ink data-[state=active]:border-action data-[state=active]:text-ink',\n        variant === 'segmented' &&\n          'h-[26px] rounded-[var(--lat-radius-sm)] px-2.5 hover:text-ink data-[state=active]:bg-surface data-[state=active]:text-ink data-[state=active]:shadow-[var(--lat-shadow-sm)]',\n        className,\n      )}\n      {...props}\n    />\n  )\n})\nTabsTrigger.displayName = 'TabsTrigger'\n\nexport const TabsContent = React.forwardRef<\n  React.ElementRef<typeof TabsPrimitive.Content>,\n  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>\n>(({ className, ...props }, ref) => (\n  <TabsPrimitive.Content\n    ref={ref}\n    className={cn(\n      'outline-none focus-visible:ring-2 focus-visible:ring-action/35 data-[state=active]:animate-[lat-fade-in_160ms_var(--lat-ease-out)]',\n      className,\n    )}\n    {...props}\n  />\n))\nTabsContent.displayName = 'TabsContent'\n\nexport const Tabs = TabsPrimitive.Root\n"
+    }
+  ]
+}

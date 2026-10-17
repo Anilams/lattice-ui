@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "control",
+  "type": "registry:lib",
+  "title": "Control styles",
+  "description": "Shared form-control and panel class recipes.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/components/ui/control.ts",
+      "target": "components/ui/control.ts",
+      "type": "registry:lib",
+      "content": "export const controlBase =\n  'h-[var(--lat-control-height)] w-full rounded-[var(--lat-radius-sm)] border border-line-strong bg-raised px-2.5 text-[var(--lat-text-sm)] text-ink transition-[border-color,background-color,box-shadow] duration-[var(--lat-duration-fast)] ease-[var(--lat-ease-standard)] hover:border-[var(--lat-text-faint)] focus-visible:border-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/25 disabled:cursor-not-allowed disabled:opacity-45'\n\nexport const controlHeight = 'h-[var(--lat-control-height)]'\n\nexport const panelBase = 'rounded-[var(--lat-radius-lg)] border border-line bg-surface'\n"
+    }
+  ]
+}

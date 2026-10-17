@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "type": "registry:ui",
+  "title": "Separator",
+  "description": "Horizontal or vertical divider.",
+  "dependencies": [
+    "@radix-ui/react-separator"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/separator.tsx",
+      "target": "components/ui/separator.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport * as SeparatorPrimitive from '@radix-ui/react-separator'\nimport { cn } from '@/lib/utils'\n\nexport const Separator = React.forwardRef<\n  React.ElementRef<typeof SeparatorPrimitive.Root>,\n  React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>\n>(({ className, orientation = 'horizontal', decorative = true, ...props }, ref) => (\n  <SeparatorPrimitive.Root\n    ref={ref}\n    decorative={decorative}\n    orientation={orientation}\n    className={cn(\n      'shrink-0 bg-line',\n      orientation === 'horizontal' ? 'h-px w-full' : 'h-full w-px',\n      className,\n    )}\n    {...props}\n  />\n))\nSeparator.displayName = 'Separator'\n"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inline-notice",
+  "type": "registry:ui",
+  "title": "InlineNotice",
+  "description": "Inline info, success, warning and danger message.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/inline-notice.tsx",
+      "target": "components/ui/inline-notice.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport { CircleCheck, CircleX, Info, TriangleAlert } from 'lucide-react'\nimport { cn } from '@/lib/utils'\n\ntype NoticeTone = 'info' | 'success' | 'warning' | 'danger'\n\nconst toneClass: Record<NoticeTone, string> = {\n  info: 'border-info/25 bg-info-soft text-info',\n  success: 'border-success/25 bg-success-soft text-success',\n  warning: 'border-warning/30 bg-warning-soft text-warning',\n  danger: 'border-danger/30 bg-danger-soft text-danger',\n}\n\nconst Icon = ({ tone }: { tone: NoticeTone }) => {\n  const props = { className: 'size-4 shrink-0', 'aria-hidden': true } as const\n  if (tone === 'success') return <CircleCheck {...props} />\n  if (tone === 'warning') return <TriangleAlert {...props} />\n  if (tone === 'danger') return <CircleX {...props} />\n  return <Info {...props} />\n}\n\nexport function InlineNotice({\n  tone = 'info',\n  title,\n  children,\n  action,\n  className,\n}: {\n  tone?: NoticeTone\n  title?: string\n  children: React.ReactNode\n  action?: React.ReactNode\n  className?: string\n}) {\n  return (\n    <div className={cn('flex items-start gap-2.5 rounded-[var(--lat-radius-md)] border px-3 py-2.5', toneClass[tone], className)}>\n      <span className=\"mt-0.5\">\n        <Icon tone={tone} />\n      </span>\n      <div className=\"min-w-0 flex-1\">\n        {title ? <div className=\"text-[var(--lat-text-sm)] font-medium text-ink\">{title}</div> : null}\n        <div className={cn('text-[var(--lat-text-xs)] leading-4 text-muted', title && 'mt-0.5')}>{children}</div>\n      </div>\n      {action ? <div className=\"shrink-0\">{action}</div> : null}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

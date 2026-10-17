@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "health-strip",
+  "type": "registry:block",
+  "title": "HealthStrip",
+  "description": "Compact operational health summary.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/status-dot.json",
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/health-strip.tsx",
+      "target": "components/console/health-strip.tsx",
+      "type": "registry:block",
+      "content": "import * as React from 'react'\nimport { Activity, CircleCheck, Radio, Router, ShieldCheck } from 'lucide-react'\nimport { cn } from '@/lib/utils'\nimport { StatusDot } from '@/components/ui/status-dot'\n\ntype Segment = {\n  label: string\n  value: React.ReactNode\n  detail: string\n  status?: 'online' | 'warning' | 'offline' | 'neutral'\n  icon: React.ReactNode\n}\n\nexport function HealthStrip({\n  segments,\n  className,\n}: {\n  segments: Segment[]\n  className?: string\n}) {\n  return (\n    <div className={cn('grid overflow-hidden rounded-[var(--lat-radius-lg)] border border-line bg-surface sm:grid-cols-2 xl:grid-cols-4', className)}>\n      {segments.map((segment, index) => (\n        <div\n          key={segment.label}\n          className={cn(\n            'flex min-h-[72px] items-center gap-3 px-3.5 py-3',\n            index > 0 && 'border-t border-line sm:border-l sm:border-t-0',\n            index === 2 && 'sm:border-l-0 sm:border-t xl:border-l xl:border-t-0',\n            index === 3 && 'sm:border-t xl:border-t-0',\n          )}\n        >\n          <div className=\"flex size-8 shrink-0 items-center justify-center rounded-[var(--lat-radius-sm)] border border-line bg-raised text-muted\">\n            {segment.icon}\n          </div>\n          <div className=\"min-w-0\">\n            <div className=\"flex items-center gap-1.5 text-[var(--lat-text-2xs)] uppercase tracking-[0.08em] text-faint\">\n              {segment.label}\n              {segment.status ? <StatusDot status={segment.status} /> : null}\n            </div>\n            <div className=\"mt-0.5 flex items-baseline gap-2.5\">\n              <span className=\"text-[var(--lat-text-xl)] font-medium leading-6 tracking-[-0.02em] text-ink\">\n                {segment.value}\n              </span>\n              <span className=\"h-2.5 w-px shrink-0 self-center bg-line-strong\" aria-hidden=\"true\" />\n              <span className=\"truncate text-[var(--lat-text-xs)] text-muted\">{segment.detail}</span>\n            </div>\n          </div>\n        </div>\n      ))}\n    </div>\n  )\n}\n\nexport const healthIcons = {\n  activity: <Activity className=\"size-4\" />,\n  radio: <Radio className=\"size-4\" />,\n  router: <Router className=\"size-4\" />,\n  shield: <ShieldCheck className=\"size-4\" />,\n  check: <CircleCheck className=\"size-4\" />,\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "type": "registry:ui",
+  "title": "Switch",
+  "description": "Radix switch with label and description.",
+  "dependencies": [
+    "@radix-ui/react-switch"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/switch.tsx",
+      "target": "components/ui/switch.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport * as SwitchPrimitive from '@radix-ui/react-switch'\nimport { cn } from '@/lib/utils'\n\nexport interface SwitchProps\n  extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {\n  label?: string\n  description?: string\n}\n\nexport const Switch = React.forwardRef<\n  React.ElementRef<typeof SwitchPrimitive.Root>,\n  SwitchProps\n>(({ className, label, description, id, ...props }, ref) => {\n  const generatedId = React.useId()\n  const inputId = id ?? generatedId\n  const control = (\n    <SwitchPrimitive.Root\n      ref={ref}\n      id={inputId}\n      className={cn(\n        'peer relative inline-flex h-[18px] w-[32px] shrink-0 cursor-pointer items-center rounded-full border border-line-strong bg-line-strong p-0.5 transition-[background-color,border-color] duration-[var(--lat-duration-fast)] after:absolute after:-inset-[3px] after:content-[\"\"] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/35 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-40 data-[state=checked]:border-action data-[state=checked]:bg-action',\n        className,\n      )}\n      {...props}\n    >\n      <SwitchPrimitive.Thumb className=\"pointer-events-none block size-3.5 rounded-full bg-white shadow-sm transition-transform duration-[var(--lat-duration-fast)] ease-[var(--lat-ease-out)] data-[state=checked]:translate-x-3.5\" />\n    </SwitchPrimitive.Root>\n  )\n\n  if (!label && !description) return control\n\n  return (\n    <div className=\"flex items-start justify-between gap-4\">\n      <label htmlFor={inputId} className=\"cursor-pointer select-none\">\n        <span className=\"block text-[var(--lat-text-sm)] leading-[18px] text-ink\">{label}</span>\n        {description ? (\n          <span className=\"mt-0.5 block max-w-[48ch] text-[var(--lat-text-xs)] leading-4 text-faint\">\n            {description}\n          </span>\n        ) : null}\n      </label>\n      {control}\n    </div>\n  )\n})\nSwitch.displayName = 'Switch'\n"
+    }
+  ]
+}

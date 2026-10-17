@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "device-glyph",
+  "type": "registry:block",
+  "title": "DeviceGlyph",
+  "description": "Device kind glyph with status indicator.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/status-dot.json",
+    "https://anilams.github.io/lattice-ui/r/types.json",
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/device-glyph.tsx",
+      "target": "components/console/device-glyph.tsx",
+      "type": "registry:block",
+      "content": "import { Camera, Laptop, Network, Router, Server, Wifi } from 'lucide-react'\nimport type { DeviceKind, DeviceStatus } from './types'\nimport { cn } from '@/lib/utils'\nimport { StatusDot } from '@/components/ui/status-dot'\n\nconst glyphs = {\n  gateway: Router,\n  switch: Network,\n  ap: Wifi,\n  client: Laptop,\n  camera: Camera,\n  server: Server,\n}\n\nexport function DeviceGlyph({\n  kind,\n  status = 'online',\n  size = 'md',\n  className,\n}: {\n  kind: DeviceKind\n  status?: DeviceStatus\n  size?: 'sm' | 'md'\n  className?: string\n}) {\n  const Icon = glyphs[kind]\n  return (\n    <span\n      className={cn(\n        'relative inline-flex shrink-0 items-center justify-center rounded-[var(--lat-radius-sm)] border border-line bg-raised text-muted',\n        size === 'sm' ? 'size-6' : 'size-8',\n        className,\n      )}\n      aria-hidden=\"true\"\n    >\n      <Icon className={size === 'sm' ? 'size-3.5' : 'size-4'} />\n      <StatusDot\n        status={status === 'online' ? 'online' : status === 'warning' ? 'warning' : 'offline'}\n        className=\"absolute -bottom-0.5 -right-0.5 ring-2 ring-[var(--lat-surface)]\"\n      />\n    </span>\n  )\n}\n"
+    }
+  ]
+}

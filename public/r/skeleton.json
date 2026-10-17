@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "title": "Skeleton",
+  "description": "Loading placeholder with reduced-motion support.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/skeleton.tsx",
+      "target": "components/ui/skeleton.tsx",
+      "type": "registry:ui",
+      "content": "import { cn } from '@/lib/utils'\n\nexport function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {\n  return <div aria-hidden=\"true\" className={cn('lat-skeleton rounded-[var(--lat-radius-sm)]', className)} {...props} />\n}\n"
+    }
+  ]
+}

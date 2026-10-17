@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lattice UI social card</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; background: #0b0c0e; }
+      body {
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #dee0e3;
+        -webkit-font-smoothing: antialiased;
+      }
+      .card {
+        position: relative;
+        width: 1280px;
+        height: 640px;
+        display: grid;
+        grid-template-columns: 510px 1fr;
+        gap: 48px;
+        padding: 64px 64px 56px;
+        background:
+          radial-gradient(900px 430px at 78% 46%, rgba(71, 151, 255, 0.12), transparent 68%),
+          #0b0c0e;
+        border: 1px solid rgba(249, 250, 250, 0.1);
+      }
+      .brand { display: flex; align-items: center; gap: 14px; }
+      .brand img { width: 44px; height: 44px; border-radius: 9px; }
+      .brand-name { font-size: 22px; font-weight: 650; letter-spacing: -0.03em; }
+      .brand-ui { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; color: #8f98a3; margin-left: 4px; }
+      h1 {
+        margin: 74px 0 18px;
+        font-size: 44px;
+        line-height: 1.08;
+        letter-spacing: -0.045em;
+        font-weight: 620;
+        color: #f2f3f5;
+        text-wrap: balance;
+      }
+      .lede { margin: 0; max-width: 430px; font-size: 17px; line-height: 1.55; color: #a9b0b9; }
+      .meta { position: absolute; left: 64px; bottom: 56px; display: flex; gap: 8px; flex-wrap: wrap; }
+      .chip {
+        border: 1px solid rgba(249, 250, 250, 0.13);
+        border-radius: 4px;
+        padding: 6px 9px;
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 10px;
+        letter-spacing: 0.02em;
+        color: #8f98a3;
+        background: rgba(249, 250, 250, 0.035);
+      }
+      .shot-wrap {
+        position: relative;
+        align-self: center;
+        border: 1px solid rgba(249, 250, 250, 0.16);
+        border-radius: 12px;
+        padding: 5px;
+        background: #1c1e21;
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.52);
+        transform: rotate(-0.7deg);
+      }
+      .shot-wrap img { display: block; width: 100%; border-radius: 8px; }
+      .shot-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        pointer-events: none;
+      }
+      .rail { position: absolute; top: 0; left: 0; bottom: 0; width: 3px; background: #4797ff; opacity: 0.9; }
+      .bottom-line {
+        position: absolute; left: 64px; right: 64px; bottom: 28px; height: 1px;
+        background: rgba(249, 250, 250, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <span class="rail"></span>
+      <section>
+        <div class="brand">
+          <img src="images/lattice-mark.svg" alt="" />
+          <div><span class="brand-name">Lattice</span><span class="brand-ui">UI</span></div>
+        </div>
+        <h1>Operational interfaces, without the visual debt.</h1>
+        <p class="lede">A dense, calm design system for dashboards, devices and settings. Source-first React components with dark and light themes.</p>
+        <div class="meta">
+          <span class="chip">React 19</span>
+          <span class="chip">Tailwind CSS 4</span>
+          <span class="chip">Radix UI</span>
+          <span class="chip">37 registry items</span>
+        </div>
+      </section>
+      <div class="shot-wrap">
+        <img src="images/dashboard-dark.png" alt="Lattice UI console dashboard" />
+      </div>
+      <div class="bottom-line"></div>
+    </main>
+  </body>
+</html>

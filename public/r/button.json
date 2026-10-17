@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "type": "registry:ui",
+  "title": "Button",
+  "description": "Primary, secondary, ghost, danger and link actions with loading state.",
+  "dependencies": [
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/button.tsx",
+      "target": "components/ui/button.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport { cva, type VariantProps } from 'class-variance-authority'\nimport { LoaderCircle } from 'lucide-react'\nimport { cn } from '@/lib/utils'\n\nconst buttonVariants = cva(\n  'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-[var(--lat-radius-sm)] border text-[var(--lat-text-sm)] font-medium leading-none transition-[background-color,border-color,color,box-shadow,transform] duration-[var(--lat-duration-fast)] ease-[var(--lat-ease-standard)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/35 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:pointer-events-none disabled:opacity-45 active:translate-y-px',\n  {\n    variants: {\n      variant: {\n        primary:\n          'border-action bg-action text-action-text hover:border-action-hover hover:bg-action-hover',\n        secondary:\n          'border-line-strong bg-raised text-ink hover:border-[var(--lat-text-faint)] hover:bg-hover',\n        ghost:\n          'border-transparent bg-transparent text-muted hover:bg-hover hover:text-ink',\n        danger:\n          'border-danger/35 bg-danger-soft text-danger hover:border-danger/60 hover:bg-danger/18',\n        link:\n          'h-auto border-transparent bg-transparent px-0 text-action hover:text-action-hover',\n      },\n      size: {\n        sm: 'h-[var(--lat-control-height-sm)] px-2.5 text-[var(--lat-text-xs)]',\n        md: 'h-[var(--lat-control-height)] px-3',\n        lg: 'h-9 px-4 text-[var(--lat-text-md)]',\n        icon: 'size-[var(--lat-control-height)] p-0',\n      },\n    },\n    defaultVariants: {\n      variant: 'secondary',\n      size: 'md',\n    },\n  },\n)\n\nexport interface ButtonProps\n  extends React.ButtonHTMLAttributes<HTMLButtonElement>,\n    VariantProps<typeof buttonVariants> {\n  loading?: boolean\n}\n\nexport const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(\n  ({ className, variant, size, loading = false, disabled, children, ...props }, ref) => (\n    <button\n      ref={ref}\n      type={props.type ?? 'button'}\n      className={cn(buttonVariants({ variant, size }), className)}\n      disabled={disabled || loading}\n      aria-busy={loading || undefined}\n      {...props}\n    >\n      {loading ? <LoaderCircle className=\"size-3.5 animate-spin\" aria-hidden=\"true\" /> : null}\n      {children}\n    </button>\n  ),\n)\nButton.displayName = 'Button'\n\nexport { buttonVariants }\n"
+    }
+  ]
+}

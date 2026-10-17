@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "type": "registry:ui",
+  "title": "Checkbox",
+  "description": "Radix checkbox with an enlarged hit area.",
+  "dependencies": [
+    "@radix-ui/react-checkbox",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/ui/checkbox.tsx",
+      "target": "components/ui/checkbox.tsx",
+      "type": "registry:ui",
+      "content": "import * as React from 'react'\nimport * as CheckboxPrimitive from '@radix-ui/react-checkbox'\nimport { Check, Minus } from 'lucide-react'\nimport { cn } from '@/lib/utils'\n\nexport interface CheckboxProps\n  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {\n  label?: string\n  description?: string\n}\n\nexport const Checkbox = React.forwardRef<\n  React.ElementRef<typeof CheckboxPrimitive.Root>,\n  CheckboxProps\n>(({ className, label, description, id, ...props }, ref) => {\n  const generatedId = React.useId()\n  const inputId = id ?? generatedId\n  const control = (\n    <CheckboxPrimitive.Root\n      ref={ref}\n      id={inputId}\n      className={cn(\n        'peer relative flex size-3.5 shrink-0 items-center justify-center rounded-[3px] border border-line-strong bg-raised text-action-text transition-[background-color,border-color,box-shadow] duration-[var(--lat-duration-fast)] after:absolute after:-inset-1.5 after:content-[\"\"] hover:border-[var(--lat-text-faint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/35 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas disabled:cursor-not-allowed disabled:opacity-40 data-[state=checked]:border-action data-[state=checked]:bg-action data-[state=indeterminate]:border-action data-[state=indeterminate]:bg-action',\n        className,\n      )}\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator className=\"flex items-center justify-center\">\n        {props.checked === 'indeterminate' ? (\n          <Minus className=\"size-2.5\" strokeWidth={3} />\n        ) : (\n          <Check className=\"size-2.5\" strokeWidth={3} />\n        )}\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  )\n\n  if (!label && !description) return control\n\n  return (\n    <div className=\"flex items-start gap-2\">\n      <span className=\"flex h-4 items-center\">{control}</span>\n      <label htmlFor={inputId} className=\"cursor-pointer select-none\">\n        <span className=\"block text-[var(--lat-text-sm)] leading-4 text-ink\">{label}</span>\n        {description ? (\n          <span className=\"mt-0.5 block text-[var(--lat-text-xs)] leading-4 text-faint\">{description}</span>\n        ) : null}\n      </label>\n    </div>\n  )\n})\nCheckbox.displayName = 'Checkbox'\n"
+    }
+  ]
+}
