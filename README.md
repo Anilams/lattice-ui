@@ -8,7 +8,7 @@
 
 A dense, calm design system for dashboards, device management, settings and telemetry.
 
-[Live demo](https://anilams.github.io/lattice-ui/) · [Components](docs/components.md) · [Registry](docs/registry.md) · [Design rules](DESIGN.md) · [中文](README.zh-CN.md)
+[Live demo](https://anilams.github.io/lattice-ui/) · [Components](docs/components.md) · [Registry](docs/registry.md) · [Design rules](DESIGN.md) · [Changelog](CHANGELOG.md) · [中文](README.zh-CN.md)
 
 [![CI](https://github.com/Anilams/lattice-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/Anilams/lattice-ui/actions/workflows/ci.yml)
 [![Deploy demo](https://github.com/Anilams/lattice-ui/actions/workflows/pages.yml/badge.svg)](https://github.com/Anilams/lattice-ui/actions/workflows/pages.yml)
@@ -17,7 +17,7 @@ A dense, calm design system for dashboards, device management, settings and tele
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-0B1120.svg)](https://tailwindcss.com/)
 [![Registry 37](https://img.shields.io/badge/registry-37_items-37BE5F.svg)](docs/registry.md)
 
-<sub>v0.1 internal preview · React 19 · TypeScript 7 · Tailwind CSS 4 · Radix UI</sub>
+<sub>v0.1 preview · public demo + preview registry · React 19 · TypeScript 7 · Tailwind CSS 4 · Radix UI</sub>
 
 </div>
 
@@ -44,7 +44,7 @@ The repository contains 37 registry items and four reference pages.
 |---|---|
 | Foundations | Theme tokens, light/dark modes, compact/roomy density, utilities and console types |
 | Primitives | Button, IconButton, Badge, StatusDot, Panel, Input, Checkbox, Switch, Tabs, Tooltip, DropdownMenu, Select, Dialog, Sheet, Separator, Skeleton, InlineNotice |
-| Console blocks | PageHeader, HealthStrip, DeviceGlyph, DeviceStatusBadge, Sparkline, TrafficChart, TrafficPanel, TopologyMap, FilterPanel, EmptyState, DataTable, SettingsSection, ActivityFeed, DetailPanel, AppShell |
+| Console blocks | Brand, Page primitives, HealthStrip, DeviceGlyph, DeviceStatusBadge, Sparkline, TrafficChart, TrafficPanel, TopologyMap, FilterPanel, EmptyState, DataTable, SettingsSection, ActivityFeed, DetailPanel, AppShell |
 | Reference app | Overview, Devices, Settings and Design Foundations |
 
 ## Preview
@@ -55,11 +55,11 @@ The repository contains 37 registry items and four reference pages.
 |---|---|
 | <img src="docs/images/devices.png" alt="Device table with filters" /> | <img src="docs/images/device-detail.png" alt="Non-modal device detail panel" /> |
 
-The layout collapses below 1280 px: the rail and navigation become a drawer, the device table scrolls horizontally, and the detail panel becomes a modal sheet.
+The secondary navigation becomes a drawer below 1024 px; below 768 px the top-bar menu replaces the rail. The device table scrolls horizontally, and the detail panel is non-modal at 1280 px and above and becomes a modal sheet below that breakpoint.
 
 ## Quick start
 
-Requirements: Node.js 20 or newer and pnpm 10 or newer.
+Tested with Node.js 24 and pnpm 11.25.0. The package declares Node.js >=20.19.0 and pnpm >=10; Vite 8 requires Node.js 20.19+ or 22.12+.
 
 ~~~bash
 git clone https://github.com/Anilams/lattice-ui.git
@@ -72,11 +72,14 @@ Open http://127.0.0.1:4173/. If pnpm reports that esbuild build scripts were ign
 
 ## Install into an existing app
 
-The registry is published with the demo on GitHub Pages. The upstream shadcn CLI and the repository's local installer both install complete dependency closures.
+The preview registry is live with the demo on GitHub Pages. It currently uses the mutable <code>/r</code> channel; pinned version directories are a release follow-up. The upstream shadcn CLI and the repository's local installer both resolve the source dependency closure.
+
+Requirements for the CLI path: a React 19 + Tailwind CSS 4 project, a configured <code>@/*</code> alias, and a shadcn-initialized project with a global stylesheet.
 
 ~~~bash
 # Install a primitive
 npx shadcn@latest add https://anilams.github.io/lattice-ui/r/button.json
+npx shadcn@latest add https://anilams.github.io/lattice-ui/r/badge.json
 
 # Install the table and its dependencies
 npx shadcn@latest add https://anilams.github.io/lattice-ui/r/data-table.json
@@ -92,14 +95,14 @@ Add the theme to the consumer's global stylesheet:
 @import "./styles/lattice/lattice.css";
 ~~~
 
-For an offline or forked registry:
+For an offline or forked registry, copy the source closure and then install the npm packages the installer prints:
 
 ~~~bash
 pnpm registry
 node scripts/install.mjs data-table detail-panel --target ../my-app
 ~~~
 
-The local installer writes under <code>src</code> by default. Use <code>--src .</code> for a root-level source tree. Conflicts abort before any file is written; a missing dependency exits non-zero. See [docs/registry.md](docs/registry.md) for flags and consumer setup.
+The local installer writes under <code>src</code> by default. Use <code>--src .</code> for a root-level source tree. It copies source files and prints the npm dependency command; it does not run the package manager. Conflicts abort before any file is written; a missing dependency exits non-zero. See [docs/registry.md](docs/registry.md) for flags and consumer setup.
 
 ## 30-second example
 
@@ -157,14 +160,14 @@ The runtime token source is [src/styles/tokens.css](src/styles/tokens.css). The 
 
 The reference app targets WCAG 2.2 AA and includes keyboard navigation, visible focus, focus restoration for overlays, nested Escape ordering, accessible sorting, chart keyboard inspection and reduced-motion handling. Empty data is a supported state.
 
-The following are **not yet certified** and must be completed before a production release:
+The following verification is still outstanding before a production release:
 
 - screen-reader passes with VoiceOver, NVDA and JAWS;
 - 320 px reflow and 200% text zoom;
 - a complete contrast matrix for component boundaries and muted-on-soft combinations;
 - a full automated and manual WCAG audit.
 
-Automated checks are useful evidence, not certification.
+Automated checks are useful evidence, not certification. The tested compatibility boundary is React 19 + Tailwind CSS 4 in a Vite consumer; React 18, Tailwind 3, Next.js SSR/RSC and other browsers are unverified.
 
 ## Registry
 
@@ -176,7 +179,7 @@ Every item is generated from the same source the app uses. No duplicate componen
 | UI | 17 primitives listed above |
 | Blocks | 16 console compositions listed above |
 
-The registry was tested with the upstream shadcn CLI for <code>button</code>, <code>data-table</code>, <code>app-shell</code> and <code>detail-panel</code>, and with a local installer for the full closure. See [docs/registry.md](docs/registry.md) for the item schema, compatibility notes and release checklist.
+The registry was tested with shadcn 4.21.5 for <code>button</code>, <code>data-table</code>, <code>app-shell</code> and <code>detail-panel</code>, and with a local installer for the full closure. The public Pages URLs are checked anonymously. Toolchain: Node 24 and pnpm 11.25.0. This is a preview channel; pin a version directory before promising reproducible installs. See [docs/registry.md](docs/registry.md) for the item schema, compatibility notes and release checklist.
 
 ## Project structure
 

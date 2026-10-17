@@ -74,7 +74,7 @@ Body copy stays at or below roughly 70 characters per line. Table text may run d
 
 The spacing scale starts at 2 px and moves through 4, 6, 8, 10, 12, 16, 20, 24, 32, 40 and 48 px. Controls are 30 px tall in compact mode and 36 px in roomy mode. Table rows are 38 px and 46 px. Panels use 8 px radius, dialog/sheet surfaces 12 px, and controls 4 px. Pills are reserved for badges and statuses.
 
-Compact mode uses a 56 px rail, 228 px navigation panel, 52 px top bar and 20 px content padding. Roomy mode increases the control, row and content padding without changing the type scale. At widths below 900 px, content padding drops to 14 px; the rail and navigation become a modal drawer.
+Compact mode uses a 56 px rail, 228 px navigation panel, 52 px top bar and 20 px content padding. Roomy mode increases the control, row and content padding without changing the type scale. The secondary navigation becomes a drawer below 1024 px; below 768 px the top-bar menu replaces the rail. Content padding drops to 14 px below 900 px.
 
 ## Components
 
@@ -96,7 +96,7 @@ Tables are semantic table elements with sticky headers, right-aligned numeric co
 
 ### Detail panel
 
-At 1024 px and wider, device details appear in a fixed 430 px non-modal panel below the top bar. It does not trap focus or block the table. Its close button receives focus on open, Escape closes it, and the trigger receives focus again on close. Below 1024 px, the same content becomes a modal right sheet with an overlay and focus trap. The panel footer includes a restart flow with an explicit demo warning.
+At 1280 px and wider, device details appear in a fixed 430 px non-modal panel below the top bar. The page reserves space for it, so background controls remain visible. Its close button receives focus on open, Escape closes it, and the trigger receives focus again on close. Below 1280 px, the same content becomes a modal right sheet with an overlay and focus trap. The panel footer includes a restart flow with an explicit demo warning.
 
 ### Filters and settings
 
@@ -125,7 +125,7 @@ Dialogs fade and scale from 98.5 percent. Menus fade and rise 4 px. Drawers tran
 
 ## Dark and light use
 
-Dark is the default console environment. Light is a full semantic swap, not an inverted filter. Both themes use the same component code and layout. Borders, disabled states, focus rings and chart grids are retuned for each theme. Light mode’s action is #006FFF; dark mode’s action is #4797FF. Do not use the marketing site’s full-bleed composition inside a console surface.
+Dark is the default console environment. Light is a full semantic swap, not an inverted filter. Both themes use the same component code and layout. Borders, disabled states, focus rings and chart grids are retuned for each theme. Light mode’s action is #0063E6; dark mode’s action is #4797FF. Do not use the marketing site’s full-bleed composition inside a console surface.
 
 ## Anti-patterns
 
@@ -142,7 +142,7 @@ Dark is the default console environment. Light is a full semantic swap, not an i
 
 - No automated WCAG audit or screen-reader matrix has been run yet.
 - The 320 px layout and 200% text zoom require a dedicated pass.
-- The registry was installed with the upstream shadcn CLI for button, data-table and app-shell into a clean consumer, and that consumer's production build passed.
+- The registry was installed with the upstream shadcn CLI for button, data-table, app-shell and detail-panel into clean consumers; one consumer's production build passed.
 - Marketing-site components, full topology editing, port matrices and historical time replay are deferred.
 - CSS is the canonical token source in 0.1; JSON-first generation and Figma export are follow-up work.
-- The 'Lattice UI' name is a working name and has not been cleared for public release.
+- The public repository uses the 'Lattice UI' working name; trademark clearance has not been completed.

@@ -14,11 +14,45 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  LATTICE_REGISTRY_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/r
+
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
-    env:
-      LATTICE_REGISTRY_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/r
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Registry drift
+        if: github.repository == 'Anilams/lattice-ui'
+        run: |
+          pnpm registry
+          git diff --exit-code -- public/r registry.json
+
+      - name: Build library
+        run: pnpm build:lib
+
+  build:
+    needs: verify
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4

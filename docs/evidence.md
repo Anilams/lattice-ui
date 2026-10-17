@@ -55,12 +55,13 @@ Computed-style frequency is not a design specification. Inherited values and off
 - A missing registry dependency exited nonzero instead of reporting a successful empty install.
 - The local installer's default src output and conflict/missing-dependency behavior were retested after the path change.
 - detail-panel installed as a 17-file dependency closure and passed TypeScript checking.
-- The upstream shadcn CLI installed button, data-table and app-shell into a clean consumer project.
+- The upstream shadcn CLI (4.21.5) installed button, data-table and app-shell into a clean consumer project.
 - That consumer produced a successful Vite build (about 33 kB CSS before gzip and 276 kB JS before gzip for the control sample).
 - The shadcn CLI installed detail-panel into another clean consumer (17 files plus the consumer stylesheet) and the result passed TypeScript checking.
 - A final combined data-table + detail-panel install created 20 files plus the consumer stylesheet and passed TypeScript checking.
 - A standalone topology-map install created 12 files, including empty-state, and passed TypeScript checking.
 - Clicking a navigation link in the mobile drawer navigated to the new page and returned focus to the menu trigger.
+- The public Pages registry at https://anilams.github.io/lattice-ui/r/button.json was installed with shadcn 4.21.5 alongside data-table into a clean consumer; 7 files plus the stylesheet were created and TypeScript passed.
 - A server-render smoke test rendered TrafficPanel, TrafficChart, TopologyMap, Sparkline and ActivityFeed with empty inputs without throwing and with explicit empty-state copy.
 - Desktop visual review at 1440x792 in dark and light themes.
 - Narrow visual review at 390x844 for dashboard, device table, navigation drawer, filter drawer and detail sheet.
@@ -69,6 +70,7 @@ Computed-style frequency is not a design specification. Inherited values and off
 - A 390x260 viewport kept the device update dialog inside the viewport with a scrollable body.
 - Key contrast pairs: light faint text 5.04:1 on white, 4.78:1 on raised, 4.53:1 on warning-soft; white on light action 5.35:1; dark faint text 4.87:1 on overlay.
 - The Impeccable mechanical detector returned no findings for pages and components; this is not a substitute for an accessibility audit.
+- GitHub Pages deployed https://anilams.github.io/lattice-ui/ successfully; the home page and registry return 200, and a deep link to /devices serves the SPA fallback.
 - Dialog centering was corrected after visual review; popover and drawer motion use separate translate/scale properties so Radix positioning is not overwritten.
 
 ## Not verified
@@ -76,11 +78,18 @@ Computed-style frequency is not a design specification. Inherited values and off
 - Automated axe or equivalent WCAG scan.
 - Screen-reader passes with VoiceOver, NVDA or JAWS.
 - 320 px minimum layout and 200% text zoom.
-- A production build against the final versioned registry URL. A local-URL consumer build passed.
+- A production build from a pinned registry install. A consumer production build from the local-URL install passed; the public preview install passed type checking.
 - A complete color-contrast matrix for every muted-on-soft combination.
 - Safari and Firefox visual parity.
 - Marketing/homepage component extraction.
 - Any production backend, authentication or real UniFi integration.
+
+## Publication
+
+- Repository: https://github.com/Anilams/lattice-ui
+- Demo: https://anilams.github.io/lattice-ui/
+- Preview registry: https://anilams.github.io/lattice-ui/r/
+- CI and Pages workflows passed on the initial public commit; the Pages build is gated by a verify job.
 
 ## Model review disclosure
 

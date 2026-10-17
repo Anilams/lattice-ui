@@ -22,6 +22,8 @@ LATTICE_REGISTRY_URL=http://127.0.0.1:4173/r pnpm registry
 
 Bare dependency names are not used. During validation, a bare "utils" dependency was resolved by the upstream CLI to an unrelated package; absolute item URLs made the closure deterministic. The local installer resolves absolute item URLs by basename, so offline installs still work.
 
+The default /r channel is a moving preview. Pin a version directory before promising reproducible installs. A fork must set LATTICE_REGISTRY_URL to its own Pages URL, regenerate the registry, and use its own repository name in the README install examples. The upstream-only registry drift check is skipped on forks; forks should add their own equivalent check once their registry is initialized.
+
 ## Item types
 
 | Type | Items |
@@ -43,7 +45,7 @@ Each item has:
   "title": "Button",
   "description": "...",
   "dependencies": ["class-variance-authority", "lucide-react"],
-  "registryDependencies": ["utils"],
+  "registryDependencies": ["https://anilams.github.io/lattice-ui/r/utils.json"],
   "files": [
     {
       "path": "src/components/ui/button.tsx",
@@ -101,7 +103,7 @@ If the consumer uses a different alias, rewrite the copied imports. The installe
 
 The local installer was tested against a clean target directory for button, data-table and detail-panel. The copied dependency closure passed TypeScript checking in a consumer-like tsconfig.
 
-The upstream CLI was run against a clean consumer project on 2026-10-17:
+The upstream CLI (4.21.5) was run against a clean consumer project on 2026-10-17:
 
 - button installed 4 files: theme CSS, tokens, utils and button.
 - data-table installed 6 files: theme, utils, checkbox, empty-state and table.
@@ -109,8 +111,10 @@ The upstream CLI was run against a clean consumer project on 2026-10-17:
 - detail-panel installed as a 17-file dependency closure.
 - The resulting consumer source passed TypeScript checking with the @/* alias.
 - The same consumer produced a successful Vite production build.
+- The published Pages registry was checked anonymously at https://anilams.github.io/lattice-ui/r/button.json.
+- shadcn 4.21.5 installed button + data-table from the public Pages URL into another clean consumer; TypeScript passed.
 
-This validates the registry shape and a production consumer build for the tested items. A full install of every item against the final versioned URL is still recommended before publishing. Use absolute registryDependencies for all published items.
+This validates the registry shape and a production consumer build for the tested items. The project is currently on a mutable preview channel at /r; a full install against a pinned version directory is still recommended before a stable release. Use absolute registryDependencies for all published items.
 
 ## Release checklist
 
@@ -119,9 +123,9 @@ This validates the registry shape and a production consumer build for the tested
 3. Install button, data-table and app-shell into a clean consumer project.
 4. Add npm dependencies and run a production build in that consumer.
 5. Verify no component imports src/data/demo.ts, a page, or a route.
-6. Repeat the shadcn CLI install and a consumer production build against the versioned registry URL.
-7. Publish with a versioned registry URL; do not use bare generic names that could resolve to an unrelated upstream component.
-8. Decide the license and complete a name/trademark review.
+6. Repeat the shadcn CLI install and a consumer production build against a pinned version directory.
+7. Keep the preview /r channel or cut a versioned registry URL; do not use bare generic names that could resolve to an unrelated upstream component.
+8. Confirm the MIT license and complete a name/trademark review before a stable release.
 
 ## Versioning
 
