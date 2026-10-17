@@ -29,7 +29,7 @@ Primary surfaces are authenticated desktop consoles used for monitoring and conf
 ## Capabilities and Constraints
 
 - Console components and three complete demo pages: overview, devices, settings.
-- Source-first registry with 37 items, including theme, utilities, base UI, and domain blocks.
+- Source-first registry with 43 items, including theme, utilities, base UI, and domain blocks.
 - Working local installer with recursive dependency resolution and conflict protection.
 - Dark and light themes; compact and roomy density.
 - Radix-backed dialogs, sheets, menus, selects, tabs, tooltips, checkboxes and switches.
@@ -38,7 +38,7 @@ Primary surfaces are authenticated desktop consoles used for monitoring and conf
 - Independent topology map with keyboard-selectable nodes.
 - No backend, authentication, real UniFi connection, or production persistence.
 - Marketing-page components and the full UniFi interaction set are out of scope for this first console release.
-- CSS tokens are the runtime source of truth in 0.1; a generated JSON export is provided for tooling. A JSON-first generation pipeline is a follow-up engineering task.
+- CSS tokens are the runtime source of truth in 0.2; a generated JSON export is provided for tooling. A JSON-first generation pipeline is a follow-up engineering task.
 - Modern evergreen browsers with CSS individual transform properties and Tailwind CSS 4.
 
 ## Brand Commitments

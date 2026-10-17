@@ -28,6 +28,12 @@
       "description": "Shared form-control and panel class recipes."
     },
     {
+      "name": "motion",
+      "type": "registry:lib",
+      "title": "Motion hooks",
+      "description": "Reduced-motion-aware numeric and series tweening."
+    },
+    {
       "name": "brand",
       "type": "registry:block",
       "title": "Lattice brand mark",
@@ -136,6 +142,12 @@
       "description": "Inline info, success, warning and danger message."
     },
     {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Queued status notifications with an accessible live region."
+    },
+    {
       "name": "page",
       "type": "registry:block",
       "title": "Page primitives",
@@ -169,7 +181,7 @@
       "name": "traffic-chart",
       "type": "registry:block",
       "title": "TrafficChart",
-      "description": "Keyboard-inspectable SVG traffic chart with two series."
+      "description": "Keyboard-inspectable SVG traffic chart with two series and animated updates."
     },
     {
       "name": "traffic-panel",
@@ -182,6 +194,12 @@
       "type": "registry:block",
       "title": "TopologyMap",
       "description": "Interactive network topology with keyboard-selectable nodes."
+    },
+    {
+      "name": "topology-workbench",
+      "type": "registry:block",
+      "title": "TopologyWorkbench",
+      "description": "Zoomable, pannable topology workbench with animated links and an inspector-ready node layer."
     },
     {
       "name": "filter-panel",
@@ -218,6 +236,24 @@
       "type": "registry:block",
       "title": "DetailPanel",
       "description": "Non-modal desktop detail panel and modal mobile sheet."
+    },
+    {
+      "name": "live-value",
+      "type": "registry:block",
+      "title": "LiveValue",
+      "description": "Tweened numeric value for live operational metrics."
+    },
+    {
+      "name": "port-matrix",
+      "type": "registry:block",
+      "title": "PortMatrix",
+      "description": "Selectable port grid with status, PoE and utilization."
+    },
+    {
+      "name": "log-stream",
+      "type": "registry:block",
+      "title": "LogStream",
+      "description": "Pausable, auto-scrolling log viewer with severity badges."
     },
     {
       "name": "app-shell",

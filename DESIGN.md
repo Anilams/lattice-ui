@@ -1,6 +1,6 @@
 # Lattice UI Design System
 
-Version 0.1.0, 2026-10-17. This document records the implemented visual system and the evidence behind it.
+Version 0.2.0, 2026-10-17. This document records the implemented visual system and the evidence behind it.
 
 ## Direction
 
@@ -121,7 +121,13 @@ The observed stylesheet contained 100, 200 and 250 ms transition declarations, b
 | ease-in | cubic-bezier(0.4, 0, 1, 1) | Exiting |
 | standard | cubic-bezier(0.2, 0.8, 0.2, 1) | Color and border changes |
 
-Dialogs fade and scale from 98.5 percent. Menus fade and rise 4 px. Drawers translate 24 px and do not fade, so content stays readable during entry. Charts reveal with a clip-path wipe on data change. Reduced-motion mode stops translation, scaling, pulsing and chart wipes while keeping state changes and close behavior functional.
+Dialogs fade and scale from 98.5 percent. Menus fade and rise 4 px. Drawers translate 24 px and do not fade, so content stays readable during entry. Live charts interpolate the previous and next series over 850 ms with requestAnimationFrame; numeric metrics tween over 420 ms. Reduced-motion mode stops translation, scaling, pulsing, tweening and chart movement while keeping state changes and close behavior functional.
+
+### Live data behavior
+
+The v0.2 demo uses a shared simulation store instead of page-local timers. It keeps rolling 1h/1d/1w/1m series, updates connected-port utilization, advances clients and latency, and records events. The top-bar Demo control can pause sampling, change speed, inject an AP failure or WAN degradation, recover, and reset.
+
+The chart never remounts on a data tick. <code>useAnimatedSeries</code> interpolates the old and new series; <code>useAnimatedNumber</code> tweens metric values. Both hooks bypass interpolation when <code>prefers-reduced-motion</code> is set, while the underlying data continues to update. Topology links use a dashed stroke animation that stops in reduced-motion mode.
 
 ## Dark and light use
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "motion",
+  "type": "registry:lib",
+  "title": "Motion hooks",
+  "description": "Reduced-motion-aware numeric and series tweening.",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    {
+      "path": "src/hooks/use-motion.ts",
+      "target": "hooks/use-motion.ts",
+      "type": "registry:lib",
+      "content": "import * as React from 'react'\n\nexport function useReducedMotion() {\n  const [reduced, setReduced] = React.useState(() => {\n    if (typeof window === 'undefined') return false\n    return window.matchMedia('(prefers-reduced-motion: reduce)').matches\n  })\n\n  React.useEffect(() => {\n    const query = window.matchMedia('(prefers-reduced-motion: reduce)')\n    const onChange = () => setReduced(query.matches)\n    query.addEventListener('change', onChange)\n    return () => query.removeEventListener('change', onChange)\n  }, [])\n\n  return reduced\n}\n\nfunction easeOutCubic(t: number) {\n  return 1 - Math.pow(1 - t, 3)\n}\n\nexport function useAnimatedNumber(value: number, duration = 420) {\n  const reduced = useReducedMotion()\n  const [display, setDisplay] = React.useState(value)\n  const displayRef = React.useRef(value)\n  const frame = React.useRef<number | null>(null)\n\n  React.useEffect(() => {\n    if (reduced || !Number.isFinite(value)) {\n      displayRef.current = value\n      setDisplay(value)\n      return\n    }\n    const from = displayRef.current\n    const start = performance.now()\n    const tick = (now: number) => {\n      const progress = Math.min(1, (now - start) / duration)\n      const next = from + (value - from) * easeOutCubic(progress)\n      displayRef.current = next\n      setDisplay(next)\n      if (progress < 1) frame.current = requestAnimationFrame(tick)\n    }\n    frame.current = requestAnimationFrame(tick)\n    return () => {\n      if (frame.current) cancelAnimationFrame(frame.current)\n    }\n  }, [value, duration, reduced])\n\n  return Number.isFinite(display) ? display : value\n}\n\nexport function useAnimatedSeries(values: number[], duration = 520) {\n  const reduced = useReducedMotion()\n  const [display, setDisplay] = React.useState(values)\n  const displayRef = React.useRef(values)\n  const frame = React.useRef<number | null>(null)\n\n  React.useEffect(() => {\n    if (reduced || !values.length) {\n      displayRef.current = values\n      setDisplay(values)\n      return\n    }\n    const from = displayRef.current.length === values.length ? displayRef.current : values.map(() => 0)\n    const start = performance.now()\n    const tick = (now: number) => {\n      const progress = Math.min(1, (now - start) / duration)\n      const eased = easeOutCubic(progress)\n      const next = values.map((target, index) => from[index] + (target - from[index]) * eased)\n      displayRef.current = next\n      setDisplay(next)\n      if (progress < 1) frame.current = requestAnimationFrame(tick)\n    }\n    frame.current = requestAnimationFrame(tick)\n    return () => {\n      if (frame.current) cancelAnimationFrame(frame.current)\n    }\n  }, [values, duration, reduced])\n\n  return display\n}\n"
+    }
+  ]
+}

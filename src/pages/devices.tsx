@@ -10,8 +10,9 @@ import {
   SlidersHorizontal,
   X,
 } from 'lucide-react'
-import type { Device, DeviceEvent, DevicePort, DeviceTraffic } from '@/data/demo'
-import { deviceKindLabel, devices } from '@/data/demo'
+import type { Device } from '@/data/demo'
+import { deviceKindLabel } from '@/data/demo'
+import { useSearchParams } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -42,41 +43,17 @@ import { DataTable, type DataTableColumn } from '@/components/console/data-table
 import { DeviceGlyph } from '@/components/console/device-glyph'
 import { DeviceStatusBadge } from '@/components/console/device-status-badge'
 import { DeviceDetailPanel } from '@/components/console/detail-panel'
+import { useToast } from '@/components/ui/toast'
+import { useControlPlane, useSimulationState } from '@/sim/provider'
 
 const statusValues = ['online', 'warning', 'offline'] as const
 const kindValues = ['gateway', 'switch', 'ap', 'camera', 'server'] as const
-const locationValues = Array.from(new Set(devices.map((device) => device.location)))
-
-function portsFor(device: Device): DevicePort[] {
-  const count = device.kind === 'switch' ? 8 : device.kind === 'gateway' ? 4 : 2
-  return Array.from({ length: count }, (_, index) => ({
-    number: index + 1,
-    label: index === 0 ? device.parent : index < 3 ? '客户端设备' : '空闲',
-    connected: index < 3,
-    speed: index < 3 ? (index === 0 ? device.uplink : '1 Gbps') : undefined,
-    poe: index > 0 && index < 3,
-  }))
-}
-
-function eventsFor(device: Device): DeviceEvent[] {
-  return [
-    { time: '10:42', title: '客户端连接', detail: '4 个新客户端接入 ' + (device.ssid ?? '网络') },
-    { time: '09:16', title: '配置同步', detail: '设备配置与控制器同步完成' },
-    { time: '08:04', title: '链路检查', detail: '上行链路 ' + device.uplink + ' 正常' },
-    { time: '昨天 22:10', title: '固件检查', detail: '当前版本 ' + device.firmware },
-  ]
-}
-
-function trafficFor(device: Device): DeviceTraffic {
-  const seed = device.name.length
-  const wave = (offset: number) =>
-    Array.from({ length: 12 }, (_, index) =>
-      8 + Math.round(Math.abs(Math.sin((index + seed + offset) * 1.25)) * 24),
-    )
-  return { download: wave(0), upload: wave(2.5) }
-}
-
 export function DevicesPage() {
+  const store = useControlPlane()
+  const sim = useSimulationState()
+  const devices = sim.devices
+  const { toast } = useToast()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [search, setSearch] = React.useState('')
   const [selected, setSelected] = React.useState<Record<string, string[]>>({})
   const [selectedRows, setSelectedRows] = React.useState<Set<string>>(new Set())
@@ -98,9 +75,25 @@ export function DevicesPage() {
   ])
   const lastFocus = React.useRef<HTMLElement | null>(null)
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const locationValues = React.useMemo(
+    () => Array.from(new Set(devices.map((device) => device.location))),
+    [devices],
+  )
 
   React.useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current)
+  }, [])
+
+  React.useEffect(() => {
+    const id = searchParams.get('device')
+    if (!id) return
+    const match = devices.find((device) => device.id === id)
+    if (match) {
+      setDetailDevice(match)
+      setDetailOpen(true)
+    }
+    // Only hydrate the first selected device from the URL.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const groups: FilterGroup[] = [
@@ -151,7 +144,7 @@ export function DevicesPage() {
       const matchesLocation = !selected.location?.length || selected.location.includes(device.location)
       return matchesSearch && matchesStatus && matchesKind && matchesLocation
     })
-  }, [search, selected])
+  }, [search, selected, devices])
 
   const toggleFilter = (group: string, value: string) => {
     setSelected((current) => {
@@ -172,10 +165,20 @@ export function DevicesPage() {
     lastFocus.current = document.activeElement as HTMLElement | null
     setDetailDevice(device)
     setDetailOpen(true)
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current)
+      next.set('device', device.id)
+      return next
+    })
   }
 
   const closeDetail = () => {
     setDetailOpen(false)
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current)
+      next.delete('device')
+      return next
+    })
     requestAnimationFrame(() => lastFocus.current?.focus())
   }
 
@@ -208,6 +211,9 @@ export function DevicesPage() {
     setBulkOpen(false)
     setSelectedRows(new Set())
     setBulkNote('演示模式：已模拟选中 ' + count + ' 台设备的重启操作，未发送真实命令。')
+    void store.restartDevices(Array.from(selectedRows)).then((ok) =>
+      toast({ title: ok ? '批量重启完成' : '批量重启失败', tone: ok ? 'success' : 'danger' }),
+    )
     if (timer.current) clearTimeout(timer.current)
     timer.current = setTimeout(() => setBulkNote(''), 6000)
   }
@@ -215,11 +221,18 @@ export function DevicesPage() {
   const runFirmwareUpdate = (id: string) => {
     setUpdatingId(id)
     if (timer.current) clearTimeout(timer.current)
-    timer.current = setTimeout(() => {
+    void store.updateFirmware(id).then((ok) => {
       setUpdatingId(null)
-      setUpdatedIds((current) => (current.includes(id) ? current : [...current, id]))
-    }, 800)
+      if (ok) setUpdatedIds((current) => (current.includes(id) ? current : [...current, id]))
+      toast({ title: ok ? '固件更新完成' : '固件更新失败', tone: ok ? 'success' : 'danger' })
+    })
   }
+
+  React.useEffect(() => {
+    if (!detailDevice) return
+    const current = devices.find((device) => device.id === detailDevice.id)
+    if (current && current !== detailDevice) setDetailDevice(current)
+  }, [devices, detailDevice])
 
   const columns: DataTableColumn<Device>[] = [
     {
@@ -516,9 +529,23 @@ export function DevicesPage() {
         device={detailDevice}
         open={detailOpen}
         onClose={closeDetail}
-        ports={detailDevice ? portsFor(detailDevice) : undefined}
-        events={detailDevice ? eventsFor(detailDevice) : undefined}
-        traffic={detailDevice ? trafficFor(detailDevice) : undefined}
+        ports={detailDevice ? sim.ports[detailDevice.id] : undefined}
+        events={
+          detailDevice
+            ? sim.logs
+                .filter((line) => line.deviceId === detailDevice.id)
+                .slice(0, 8)
+                .map((line) => ({ time: line.time, title: line.level, detail: line.message }))
+            : undefined
+        }
+        traffic={
+          detailDevice
+            ? {
+                download: sim.traffic['1h'].slice(-12).map((point) => point.download),
+                upload: sim.traffic['1h'].slice(-12).map((point) => point.upload),
+              }
+            : undefined
+        }
         demoMode
       />
 

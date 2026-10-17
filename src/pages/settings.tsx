@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { InlineNotice } from '@/components/ui/inline-notice'
+import { useToast } from '@/components/ui/toast'
 import { PageBody, PageHeader } from '@/components/console/page'
 import { SettingsSection, SettingRow } from '@/components/console/settings-section'
 
@@ -52,6 +53,7 @@ const ipv4 = /^(25[0-5]|2[0-4]\d|1?\d?\d)(\.(25[0-5]|2[0-4]\d|1?\d?\d)){3}$/
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function SettingsPage() {
+  const { toast } = useToast()
   const [form, setForm] = React.useState<SettingsForm>(initialForm)
   const [baseline, setBaseline] = React.useState<SettingsForm>(initialForm)
   const [submitted, setSubmitted] = React.useState(false)
@@ -95,6 +97,7 @@ export function SettingsPage() {
       setBaseline(form)
       setSubmitted(false)
       setSavedAt(new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }))
+      toast({ title: '设置已保存', description: '仅保存在当前演示页面内存中。', tone: 'success' })
     }, 900)
   }
 

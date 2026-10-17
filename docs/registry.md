@@ -29,9 +29,11 @@ The default /r channel is a moving preview. Pin a version directory before promi
 | Type | Items |
 |---|---|
 | registry:theme | theme |
-| registry:lib | utils, types, control |
-| registry:ui | button, icon-button, badge, status-dot, panel, input, checkbox, switch, tabs, tooltip, dropdown-menu, select, dialog, sheet, separator, skeleton, inline-notice |
-| registry:block | brand, page, health-strip, device-glyph, device-status-badge, sparkline, traffic-chart, traffic-panel, topology-map, filter-panel, empty-state, data-table, settings-section, activity-feed, detail-panel, app-shell |
+| registry:lib | utils, types, control, motion |
+| registry:ui | button, icon-button, badge, status-dot, panel, input, checkbox, switch, tabs, tooltip, dropdown-menu, select, dialog, sheet, separator, skeleton, inline-notice, toast |
+| registry:block | brand, page, health-strip, device-glyph, device-status-badge, sparkline, traffic-chart, traffic-panel, topology-map, topology-workbench, filter-panel, empty-state, data-table, settings-section, activity-feed, detail-panel, live-value, port-matrix, log-stream, app-shell |
+
+The v0.2 index contains 43 items.
 
 ## Item format
 
@@ -113,6 +115,7 @@ The upstream CLI (4.21.5) was run against a clean consumer project on 2026-10-17
 - The same consumer produced a successful Vite production build.
 - The published Pages registry was checked anonymously at https://anilams.github.io/lattice-ui/r/button.json.
 - shadcn 4.21.5 installed button + data-table from the public Pages URL into another clean consumer; TypeScript passed.
+- A v0.2 local install of topology-workbench, port-matrix, toast and live-value created 15 files and passed TypeScript checking.
 
 This validates the registry shape and a production consumer build for the tested items. The project is currently on a mutable preview channel at /r; a full install against a pinned version directory is still recommended before a stable release. Use absolute registryDependencies for all published items.
 

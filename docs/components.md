@@ -261,6 +261,45 @@ TrafficChart accepts data points with download and upload values. The chart is a
 
 Nodes use percentage positions over a 600x330 coordinate space. Each node is a real button with aria-pressed. The selected node updates the text summary and highlights connected links.
 
+## TopologyWorkbench
+
+TopologyWorkbench is the full-page topology surface. It adds zoom buttons, pointer panning, a larger canvas and animated active links. The surrounding page owns the selected node and the inspector. Node positions remain percentage-based, so the same data works in the compact TopologyMap and the workbench.
+
+## PortMatrix
+
+~~~tsx
+<PortMatrix ports={ports} selected={portNumber} onSelect={(port) => setPortNumber(port.number)} />
+~~~
+
+Each port is a button with a visible number, link label, speed, PoE flag and an animated utilization bar. Pass the live ports from your data source; the component does not simulate state.
+
+## LogStream
+
+~~~tsx
+<LogStream logs={filteredLogs} paused={tailPaused} autoScroll={!tailPaused} />
+~~~
+
+The stream uses <code>role="log"</code> with a polite live region when tailing and turns the region off when paused. Auto-scroll is local to the stream container, not the page. Severity is expressed with a label and tone, not color alone.
+
+## LiveValue
+
+LiveValue tweens a numeric value with <code>useAnimatedNumber</code> and uses tabular numerals. It is intended for measured metrics, not editable fields or arbitrary count-up decoration. Reduced-motion mode displays the target immediately.
+
+## Toast
+
+Wrap the application in ToastProvider and call <code>useToast().toast</code> from command handlers:
+
+~~~tsx
+const { toast } = useToast()
+toast({ title: '端口已启用', description: '日志和状态已更新。', tone: 'success' })
+~~~
+
+Toasts are limited to four visible items, auto-dismiss after 4.2 seconds by default, and expose a close button.
+
+## Simulation runtime
+
+The reference app uses a demo-only <code>ControlPlane</code> in <code>src/sim</code>. It is not part of the registry. It provides deterministic telemetry, connected-port utilization, logs, alerts, commands, connection state and a pause/speed/reset control plane. The same hooks can be replaced by a real API or WebSocket adapter without changing the component contracts.
+
 ## AppShell
 
 AppShell expects rail items, grouped navigation, theme and density props. It includes the site switcher, product tabs, notification panel, account menu, mobile navigation sheet and command palette (Cmd/Ctrl+K). It depends on react-router-dom and should be treated as an application-level block rather than a primitive.

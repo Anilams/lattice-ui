@@ -52,6 +52,8 @@ export type NavItem = {
   icon: LucideIcon
   badge?: string
   end?: boolean
+  disabled?: boolean
+  title?: string
 }
 
 export type NavSection = {
@@ -68,7 +70,7 @@ export type ShellNotification = {
   id: string
   title: string
   detail: string
-  tone: 'online' | 'warning' | 'info' | 'neutral'
+  tone: 'online' | 'warning' | 'offline' | 'info' | 'neutral'
 }
 
 type Theme = 'dark' | 'light'
@@ -85,9 +87,9 @@ const defaultNotifications: ShellNotification[] = [
 ]
 
 const productItems = [
-  { label: 'Network', icon: Wifi, active: true },
-  { label: 'Protect', icon: ShieldCheck, active: false },
-  { label: 'Access', icon: Command, active: false },
+  { label: 'Network', icon: Wifi, active: true, disabled: false },
+  { label: 'Protect', icon: ShieldCheck, active: false, disabled: true },
+  { label: 'Access', icon: Command, active: false, disabled: true },
 ]
 
 export function AppShell({
@@ -100,6 +102,7 @@ export function AppShell({
   onToggleDensity,
   sites = defaultSites,
   notifications = defaultNotifications,
+  demoControls,
 }: {
   rail: RailItem[]
   nav: NavSection[]
@@ -110,6 +113,7 @@ export function AppShell({
   onToggleDensity: () => void
   sites?: ShellSite[]
   notifications?: ShellNotification[]
+  demoControls?: React.ReactNode
 }) {
   const [navVisible, setNavVisible] = React.useState(true)
   const [mobileOpen, setMobileOpen] = React.useState(false)
@@ -183,6 +187,20 @@ export function AppShell({
             <div className="space-y-0.5">
               {section.items.map((item) => {
                 const Icon = item.icon
+                if (item.disabled) {
+                  return (
+                    <span
+                      key={item.to}
+                      aria-disabled="true"
+                      title={item.title ?? '将在后续版本提供'}
+                      className="flex h-10 cursor-not-allowed items-center gap-2 rounded-[var(--lat-radius-sm)] px-2 text-[var(--lat-text-sm)] text-faint opacity-55 lg:h-[30px]"
+                    >
+                      <Icon className="size-3.5 shrink-0" />
+                      <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                      {item.badge ? <Badge tone="neutral" className="px-1 py-0 text-[8px]">{item.badge}</Badge> : null}
+                    </span>
+                  )
+                }
                 return (
                   <NavLink
                     key={item.to}
@@ -237,7 +255,7 @@ export function AppShell({
           设计基础
         </NavLink>
         <div className="mt-2 flex items-center justify-between px-2 text-[10px] text-faint">
-          <span>Lattice 0.1</span>
+          <span>Lattice 0.2</span>
           <span className="flex items-center gap-1">
             <StatusDot status="online" pulse />
             本地预览
@@ -294,7 +312,7 @@ export function AppShell({
               key={product.label}
               type="button"
               aria-current={product.active ? 'page' : undefined}
-              aria-disabled={!product.active}
+              disabled={product.disabled}
               title={product.active ? product.label : product.label + ' 模块不在本演示范围'}
               className={cn(
                 'flex h-8 items-center gap-1.5 rounded-[var(--lat-radius-sm)] px-2 text-[var(--lat-text-xs)] transition-colors',
@@ -316,6 +334,7 @@ export function AppShell({
         </div>
 
         <div className="flex shrink-0 items-center gap-0.5 px-2">
+          {demoControls}
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
@@ -337,9 +356,11 @@ export function AppShell({
             <DropdownMenuTrigger asChild>
               <IconButton label="通知" size="sm" className="relative">
                 <Bell className="size-3.5" />
-                <span className="absolute right-0.5 top-0.5 flex size-3 items-center justify-center rounded-full bg-action text-[8px] font-semibold text-action-text">
-                  {notifications.length}
-                </span>
+                {notifications.length ? (
+                  <span className="absolute right-0.5 top-0.5 flex size-3 items-center justify-center rounded-full bg-action text-[8px] font-semibold text-action-text">
+                    {notifications.length}
+                  </span>
+                ) : null}
               </IconButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-72">

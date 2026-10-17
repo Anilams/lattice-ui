@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Gauge, Play, Router, ShieldCheck, Wifi } from 'lucide-react'
+import { ArrowRight, Gauge, RefreshCw, TriangleAlert } from 'lucide-react'
 import type { Range, Wan } from '@/data/demo'
-import { activities, clients, makeTraffic, topologyLinks, topologyNodes, wans } from '@/data/demo'
+import { clients, topologyLinks, wans } from '@/data/demo'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Panel, PanelHeader } from '@/components/ui/panel'
@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { useToast } from '@/components/ui/toast'
 import { DeviceGlyph } from '@/components/console/device-glyph'
 import { PageBody, PageHeader } from '@/components/console/page'
 import { HealthStrip, healthIcons } from '@/components/console/health-strip'
@@ -23,11 +24,16 @@ import { TrafficPanel } from '@/components/console/traffic-panel'
 import { TopologyMap } from '@/components/console/topology-map'
 import { ActivityFeed } from '@/components/console/activity-feed'
 import { Sparkline } from '@/components/console/sparkline'
+import { LiveValue } from '@/components/console/live-value'
+import { useControlPlane, useSimulationState } from '@/sim/provider'
 import { cn } from '@/lib/utils'
 
 export function DashboardPage() {
   const navigate = useNavigate()
-  const [range, setRange] = React.useState<Range>('1d')
+  const store = useControlPlane()
+  const state = useSimulationState()
+  const { toast } = useToast()
+  const [range, setRange] = React.useState<Range>('1h')
   const [wan, setWan] = React.useState<'primary' | 'secondary'>('primary')
   const [failover, setFailover] = React.useState(true)
   const [natOpen, setNatOpen] = React.useState(false)
@@ -35,12 +41,15 @@ export function DashboardPage() {
   const [testing, setTesting] = React.useState(false)
   const [result, setResult] = React.useState<{ download: number; upload: number; latency: number } | null>(null)
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const incident = state.scenario !== 'normal'
+  const openAlert = state.alerts.find((alert) => alert.status === 'open')
+  const traffic = state.traffic[range]
+  const deviceHealthy = state.stats.devicesOnline === state.stats.devicesTotal
+  const healthy = !incident && state.stats.alertsOpen === 0 && deviceHealthy
 
   React.useEffect(() => () => {
     if (timer.current) clearTimeout(timer.current)
   }, [])
-
-  const traffic = React.useMemo(() => makeTraffic(range, wan), [range, wan])
 
   const runSpeedTest = () => {
     setTesting(true)
@@ -49,69 +58,114 @@ export function DashboardPage() {
       setTesting(false)
       setResult({ download: 842.6, upload: 317.8, latency: 12 })
       setSpeedOpen(true)
+      toast({ title: '速度测试完成', description: '北星光纤 · 演示结果', tone: 'success' })
     }, 1200)
+  }
+
+  const inject = () => {
+    store.injectApFailure('hall-ap')
+    toast({ title: '已注入 AP 离线', description: '健康条、图表、设备与告警同步变化。', tone: 'warning' })
+  }
+
+  const recover = async () => {
+    const ok = await store.recoverIncident()
+    toast({
+      title: ok ? '网络已恢复' : '恢复失败',
+      description: ok ? '设备、端口和告警已经同步。' : '请重试恢复命令。',
+      tone: ok ? 'success' : 'danger',
+    })
   }
 
   return (
     <PageBody>
       <PageHeader
         title="概览"
-        description="北辰实验室 · 2 条上行链路、8 台设备与 28 个客户端。"
-        meta={<Badge tone="success" dot>运行正常</Badge>}
+        description={'北辰实验室 · ' + state.stats.devicesOnline + ' 台设备在线、' + state.stats.clients + ' 个客户端、' + state.stats.alertsOpen + ' 个开放告警。'}
+        meta={
+          <Badge tone={healthy ? 'success' : 'warning'} dot>
+            {incident ? '需要处理' : state.stats.alertsOpen ? '有告警' : '运行正常'}
+          </Badge>
+        }
         actions={
           <>
             <Button variant="secondary" onClick={() => navigate('/devices')}>
               设备清单
               <ArrowRight className="size-3.5" />
             </Button>
+            {incident ? (
+              <Button variant="primary" onClick={recover}>
+                <RefreshCw className="size-3.5" />
+                恢复网络
+              </Button>
+            ) : (
+              <Button variant="secondary" onClick={inject}>
+                <TriangleAlert className="size-3.5" />
+                注入故障
+              </Button>
+            )}
             <Button variant="primary" onClick={runSpeedTest} loading={testing}>
-              {testing ? '测试中…' : '运行速度测试'}
+              {testing ? '测试中…' : '速度测试'}
             </Button>
           </>
         }
       />
 
-      <InlineNotice
-        tone="warning"
-        title="在 WAN1 上检测到上游 NAT"
-        action={
-          <Button variant="link" size="sm" className="h-auto text-[10px]" onClick={() => setNatOpen(true)}>
-            了解更多
-          </Button>
-        }
-        className="mb-3"
-      >
-        部分入站连接可能受限。演示数据不会修改任何网络配置。
-      </InlineNotice>
+      {incident ? (
+        <InlineNotice
+          tone="danger"
+          title={openAlert?.title ?? '网络故障'}
+          action={
+            <Button variant="link" size="sm" className="h-auto text-[10px]" onClick={recover}>
+              恢复
+            </Button>
+          }
+          className="mb-3"
+        >
+          {openAlert?.detail ?? '故障已注入。打开拓扑、端口或设备详情查看证据。'}
+        </InlineNotice>
+      ) : (
+        <InlineNotice
+          tone="warning"
+          title="在 WAN1 上检测到上游 NAT"
+          action={
+            <Button variant="link" size="sm" className="h-auto text-[10px]" onClick={() => setNatOpen(true)}>
+              了解更多
+            </Button>
+          }
+          className="mb-3"
+        >
+          部分入站连接可能受限。演示数据不会修改任何网络配置。
+        </InlineNotice>
+      )}
 
       <HealthStrip
         segments={[
           {
             label: '互联网',
-            value: '2 / 2',
-            detail: '1 Gbps 主链路',
-            status: 'online',
+            value: <><LiveValue value={state.stats.wanUp} /> / {state.stats.wanTotal}</>,
+            detail: incident && state.scenario === 'wan-degraded' ? 'WAN1 降级' : '1 Gbps 主链路',
+            status: state.scenario === 'wan-degraded' ? 'warning' : 'online',
             icon: healthIcons.router,
           },
           {
             label: '无线客户端',
-            value: '28',
+            value: <LiveValue value={state.stats.clients} />,
             detail: '5 个 AP · 98% 信号',
-            status: 'online',
+            status: incident ? 'warning' : 'online',
             icon: healthIcons.radio,
           },
           {
             label: '设备',
-            value: '8',
-            detail: '1 台需要注意',
-            status: 'warning',
+            value: <><LiveValue value={state.stats.devicesOnline} /> / {state.stats.devicesTotal}</>,
+            detail: deviceHealthy ? '全部在线' : '1 台离线',
+            status: deviceHealthy ? 'online' : 'warning',
             icon: healthIcons.check,
           },
           {
             label: '安全',
-            value: '0',
-            detail: '过去 24 小时告警',
-            status: 'online',
+            value: <LiveValue value={state.stats.alertsOpen} />,
+            detail: state.stats.alertsOpen ? '开放告警' : '过去 24 小时无告警',
+            status: state.stats.alertsOpen ? 'warning' : 'online',
             icon: healthIcons.shield,
           },
         ]}
@@ -127,17 +181,15 @@ export function DashboardPage() {
             wans={wans}
             selectedWan={wan}
             onSelectWan={setWan}
+            paused={state.paused}
+            onTogglePause={() => store.setPaused(!state.paused)}
+            lastUpdated={state.lastUpdated}
           />
-          <TopologyMap nodes={topologyNodes} links={topologyLinks} />
+          <TopologyMap nodes={state.topology} links={topologyLinks} />
         </div>
         <div className="min-w-0 space-y-3">
-          <UplinkPanel
-            selected={wan}
-            onSelect={setWan}
-            failover={failover}
-            onFailoverChange={setFailover}
-          />
-          <ActivityFeed items={activities} />
+          <UplinkPanel selected={wan} onSelect={setWan} failover={failover} onFailoverChange={setFailover} />
+          <ActivityFeed items={state.activities} />
           <ClientPanel />
         </div>
       </div>
@@ -151,25 +203,11 @@ export function DashboardPage() {
             </DialogDescription>
           </DialogHeader>
           <div className="rounded-[var(--lat-radius-md)] border border-line bg-raised p-3 text-[var(--lat-text-xs)] leading-5 text-muted">
-            <div className="flex items-center justify-between border-b border-line pb-2">
-              <span>接口</span>
-              <span className="lat-data text-ink">WAN1</span>
-            </div>
-            <div className="flex items-center justify-between border-b border-line py-2">
-              <span>检测结果</span>
-              <span className="text-warning">上游 NAT 存在</span>
-            </div>
-            <div className="flex items-center justify-between pt-2">
-              <span>建议</span>
-              <span className="text-right text-ink">需要入站服务时配置端口转发</span>
-            </div>
+            <div className="flex items-center justify-between border-b border-line pb-2"><span>接口</span><span className="lat-data text-ink">WAN1</span></div>
+            <div className="flex items-center justify-between border-b border-line py-2"><span>检测结果</span><span className="text-warning">上游 NAT 存在</span></div>
+            <div className="flex items-center justify-between pt-2"><span>建议</span><span className="text-right text-ink">需要入站服务时配置端口转发</span></div>
           </div>
-          <p className="mt-3 text-[10px] leading-4 text-faint">
-            说明来自演示数据。接入真实控制器前，应核对运营商设备与本地网关配置。
-          </p>
-          <DialogFooter>
-            <Button onClick={() => setNatOpen(false)}>知道了</Button>
-          </DialogFooter>
+          <DialogFooter><Button onClick={() => setNatOpen(false)}>知道了</Button></DialogFooter>
         </DialogContent>
       </Dialog>
 
@@ -177,7 +215,7 @@ export function DashboardPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>速度测试完成</DialogTitle>
-            <DialogDescription>北星光纤 · 203.0.113.24 · 采样时间 10:47</DialogDescription>
+            <DialogDescription>北星光纤 · 203.0.113.24 · 演示结果</DialogDescription>
           </DialogHeader>
           <div className="grid grid-cols-3 divide-x divide-line rounded-[var(--lat-radius-md)] border border-line">
             {[
@@ -194,10 +232,7 @@ export function DashboardPage() {
               </div>
             ))}
           </div>
-          <p className="mt-3 text-[10px] text-faint">演示结果，不代表真实线路性能。</p>
-          <DialogFooter>
-            <Button onClick={() => setSpeedOpen(false)}>关闭</Button>
-          </DialogFooter>
+          <DialogFooter><Button onClick={() => setSpeedOpen(false)}>关闭</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </PageBody>
@@ -217,23 +252,14 @@ function UplinkPanel({
 }) {
   return (
     <Panel>
-      <PanelHeader
-        title="上行链路"
-        description="按延迟与使用量排序"
-        actions={<Badge tone="success" dot>2 条在线</Badge>}
-      />
+      <PanelHeader title="上行链路" description="按延迟与使用量排序" actions={<Badge tone="success" dot>2 条在线</Badge>} />
       <div>
         {wans.map((item) => (
           <WanRow key={item.id} wan={item} selected={selected === item.id} onSelect={() => onSelect(item.id)} />
         ))}
       </div>
       <div className="border-t border-line px-3.5 py-2.5">
-        <Switch
-          label="自动故障转移"
-          description="主链路中断时切换到海港专线"
-          checked={failover}
-          onCheckedChange={onFailoverChange}
-        />
+        <Switch label="自动故障转移" description="主链路中断时切换到海港专线" checked={failover} onCheckedChange={onFailoverChange} />
       </div>
     </Panel>
   )
@@ -241,27 +267,17 @@ function UplinkPanel({
 
 function WanRow({ wan, selected, onSelect }: { wan: Wan; selected: boolean; onSelect: () => void }) {
   const [values] = React.useState(() =>
-    wan.id === 'primary'
-      ? [14, 19, 16, 24, 21, 29, 25, 23, 31, 28, 36, 32]
-      : [7, 10, 8, 13, 11, 16, 14, 18, 15, 19, 17, 22],
+    wan.id === 'primary' ? [14, 19, 16, 24, 21, 29, 25, 23, 31, 28, 36, 32] : [7, 10, 8, 13, 11, 16, 14, 18, 15, 19, 17, 22],
   )
   return (
     <button
       type="button"
       aria-pressed={selected}
       onClick={onSelect}
-      className={cn(
-        'block w-full border-b border-line-faint px-3.5 py-2.5 text-left transition-colors last:border-b-0 hover:bg-hover',
-        selected && 'bg-selected',
-      )}
+      className={cn('block w-full border-b border-line-faint px-3.5 py-2.5 text-left transition-colors last:border-b-0 hover:bg-hover', selected && 'bg-selected')}
     >
       <div className="flex items-center gap-2">
-        <span
-          className={cn(
-            'size-1.5 shrink-0 rounded-full',
-            wan.color === 'cyan' ? 'bg-series-1' : 'bg-series-2',
-          )}
-        />
+        <span className={cn('size-1.5 shrink-0 rounded-full', wan.color === 'cyan' ? 'bg-series-1' : 'bg-series-2')} />
         <span className="min-w-0 flex-1 text-[var(--lat-text-xs)] font-medium text-ink">{wan.name}</span>
         <span className="text-[9px] text-faint">{wan.isp}</span>
         {selected ? <span className="size-1.5 rounded-full bg-action" aria-hidden="true" /> : null}
@@ -269,17 +285,11 @@ function WanRow({ wan, selected, onSelect }: { wan: Wan; selected: boolean; onSe
       <div className="mt-1.5 grid grid-cols-[1fr_92px] items-end gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-[9px] text-faint">
-            <span className="lat-data">{wan.ip}</span>
-            <span className="text-line-strong">/</span>
-            <span>{wan.speed}</span>
+            <span className="lat-data">{wan.ip}</span><span className="text-line-strong">/</span><span>{wan.speed}</span>
           </div>
           <div className="mt-1.5 flex items-center gap-3 text-[10px]">
-            <span className="flex items-center gap-1 text-muted">
-              <Gauge className="size-2.5" />
-              <span className="lat-data">{wan.latency} ms</span>
-            </span>
-            <span className="text-faint">抖动 {wan.jitter} ms</span>
-            <span className="text-faint">丢包 {wan.loss}%</span>
+            <span className="flex items-center gap-1 text-muted"><Gauge className="size-2.5" /><span className="lat-data">{wan.latency} ms</span></span>
+            <span className="text-faint">抖动 {wan.jitter} ms</span><span className="text-faint">丢包 {wan.loss}%</span>
           </div>
         </div>
         <div className="w-full">
@@ -294,25 +304,14 @@ function WanRow({ wan, selected, onSelect }: { wan: Wan; selected: boolean; onSe
 function ClientPanel() {
   return (
     <Panel>
-      <PanelHeader
-        title="热门客户端"
-        description="过去 24 小时"
-        actions={
-          <Button variant="ghost" size="sm" className="h-6 gap-1 px-1.5 text-[10px]">
-            全部
-            <ArrowRight className="size-3" />
-          </Button>
-        }
-      />
+      <PanelHeader title="热门客户端" description="过去 24 小时" actions={<Button variant="ghost" size="sm" className="h-6 gap-1 px-1.5 text-[10px]">全部<ArrowRight className="size-3" /></Button>} />
       <div>
         {clients.map((client) => (
           <div key={client.id} className="flex items-center gap-2.5 border-b border-line-faint px-3.5 py-2 last:border-b-0">
             <DeviceGlyph kind={client.kind} size="sm" />
             <div className="min-w-0 flex-1">
               <div className="truncate text-[11px] text-ink">{client.name}</div>
-              <div className="mt-1 h-0.5 overflow-hidden rounded-full bg-raised">
-                <div className="h-full rounded-full bg-action/60" style={{ width: client.percent + '%' }} />
-              </div>
+              <div className="mt-1 h-0.5 overflow-hidden rounded-full bg-raised"><div className="h-full rounded-full bg-action/60" style={{ width: client.percent + '%' }} /></div>
             </div>
             <span className="lat-data shrink-0 text-[9px] text-faint">{client.usage}</span>
           </div>

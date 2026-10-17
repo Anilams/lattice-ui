@@ -22,6 +22,15 @@ export function TopologyMap({
   className?: string
 }) {
   const [activeId, setActiveId] = React.useState<string>('gw')
+  const focusedIncident = React.useRef(false)
+  const incidentNode = nodes.find((node) => node.status === 'offline')
+  React.useEffect(() => {
+    if (incidentNode && !focusedIncident.current) {
+      setActiveId(incidentNode.id)
+      focusedIncident.current = true
+    }
+    if (!incidentNode) focusedIncident.current = false
+  }, [incidentNode])
   if (!nodes.length) {
     return (
       <Panel className={className}>

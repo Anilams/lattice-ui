@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Activity, ChevronDown } from 'lucide-react'
+import { Activity, ChevronDown, Pause, Play } from 'lucide-react'
 import type { Range, TrafficPoint, Wan } from './types'
 import { cn } from '@/lib/utils'
 import { Panel, PanelHeader } from '@/components/ui/panel'
@@ -21,6 +21,9 @@ export function TrafficPanel({
   wans,
   selectedWan,
   onSelectWan,
+  paused = false,
+  onTogglePause,
+  lastUpdated,
   className,
 }: {
   data: TrafficPoint[]
@@ -29,10 +32,14 @@ export function TrafficPanel({
   wans: Wan[]
   selectedWan: 'primary' | 'secondary'
   onSelectWan: (id: 'primary' | 'secondary') => void
+  paused?: boolean
+  onTogglePause?: () => void
+  lastUpdated?: number
   className?: string
 }) {
   const [visible, setVisible] = React.useState({ download: true, upload: true })
   const wan = wans.find((item) => item.id === selectedWan)
+  const simulatedAt = data[data.length - 1]?.t
 
   return (
     <Panel className={className}>
@@ -43,18 +50,27 @@ export function TrafficPanel({
             <span className="rounded-full border border-line px-1.5 py-0.5 text-[9px] font-normal text-faint">
               {wan?.name ?? '未选择链路'}
             </span>
+            <span className="rounded-full border border-line px-1.5 py-0.5 text-[9px] font-normal text-faint">模拟</span>
           </span>
         }
         actions={
-          <Tabs value={range} onValueChange={(value) => onRangeChange(value as Range)}>
-            <TabsList variant="segmented">
-              {(Object.keys(rangeLabels) as Range[]).map((key) => (
-                <TabsTrigger key={key} value={key} className="px-2 text-[10px]">
-                  {rangeLabels[key]}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+          <>
+            {onTogglePause ? (
+              <Button variant="ghost" size="sm" className="h-7 gap-1 px-1.5 text-[10px]" onClick={onTogglePause}>
+                {paused ? <Play className="size-3" /> : <Pause className="size-3" />}
+                {paused ? '继续' : '暂停'}
+              </Button>
+            ) : null}
+            <Tabs value={range} onValueChange={(value) => onRangeChange(value as Range)}>
+              <TabsList variant="segmented">
+                {(Object.keys(rangeLabels) as Range[]).map((key) => (
+                  <TabsTrigger key={key} value={key} className="px-2 text-[10px]">
+                    {rangeLabels[key]}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </>
         }
       />
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line-faint px-3.5 py-2">
@@ -74,8 +90,9 @@ export function TrafficPanel({
         </div>
         <div className="flex items-center gap-2 text-[10px] text-faint">
           <span className="flex items-center gap-1">
-            <Activity className="size-3 text-success" />
-            <span className="tabular-nums text-muted">实时</span>
+            <Activity className={cn('size-3', paused ? 'text-warning' : 'text-success')} />
+            <span className="tabular-nums text-muted">{paused ? '已暂停' : '实时'}</span>
+            {(simulatedAt ?? lastUpdated) ? <span className="hidden text-faint sm:inline">· 模拟 {new Date((simulatedAt ?? lastUpdated)!).toLocaleTimeString('zh-CN', { hour12: false })}</span> : null}
           </span>
           <Button
             variant="ghost"

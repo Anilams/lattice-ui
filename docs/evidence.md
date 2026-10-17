@@ -48,7 +48,7 @@ Computed-style frequency is not a design specification. Inherited values and off
 
 - pnpm typecheck passed.
 - pnpm build passed; production bundle emitted. The main JS chunk is about 550 kB before gzip and triggers Vite's 500 kB warning.
-- pnpm registry generated 37 items.
+- pnpm registry generated 43 items.
 - The local installer installed button + theme, then data-table + detail-panel into clean targets under src, matching the @/* to ./src/* contract.
 - The installed file set passed a consumer-like TypeScript check.
 - A deliberately modified file caused the installer to abort before writing any file and exit nonzero; the local edit remained intact.
@@ -90,6 +90,16 @@ Computed-style frequency is not a design specification. Inherited values and off
 - Demo: https://anilams.github.io/lattice-ui/
 - Preview registry: https://anilams.github.io/lattice-ui/r/
 - CI and Pages workflows passed on the initial public commit; the Pages build is gated by a verify job.
+
+## v0.2 verification
+
+- Shared ControlPlane advances 1h/1d/1w/1m telemetry, clients, latency and port utilization.
+- The live chart path changed between two samples 2.2 seconds apart without a full remount.
+- Demo injection propagates through overview, topology, devices, ports and logs; recovery restores devices, ports and alerts.
+- The command flow exposes pending, success and error states; reset clears incident state.
+- Vitest covers telemetry ticks, pause, AP failure, recovery and reset (4 tests passing).
+- The registry now contains 43 items. New topology-workbench, port-matrix, toast and live-value items installed together with 15 files and passed consumer TypeScript checking.
+- Desktop and 390x844 screenshots cover the new topology, port matrix and log/alerts routes.
 
 ## Model review disclosure
 

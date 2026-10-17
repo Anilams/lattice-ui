@@ -212,6 +212,21 @@
   100% { background-position: -200% 0; }
 }
 
+@keyframes lat-toast-in {
+  from { opacity: 0; translate: 12px 0; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes lat-toast-out {
+  from { opacity: 1; translate: 0 0; }
+  to { opacity: 0; translate: 12px 0; }
+}
+
+@keyframes lat-link-flow {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+
 .lat-overlay[data-state="open"] {
   animation: lat-fade-in var(--lat-duration-base) var(--lat-ease-out);
 }
@@ -282,6 +297,14 @@
 
 .lat-dialog-content {
   translate: -50% -50%;
+}
+
+.lat-toast {
+  animation: lat-toast-in 180ms var(--lat-ease-out);
+}
+
+.lat-topology-link {
+  animation: lat-link-flow 1.4s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

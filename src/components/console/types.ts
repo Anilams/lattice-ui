@@ -75,6 +75,8 @@ export type DevicePort = {
   connected: boolean
   speed?: string
   poe?: boolean
+  utilization?: number
+  status?: 'up' | 'down' | 'disabled'
 }
 
 export type DeviceTraffic = {
@@ -86,4 +88,14 @@ export type DeviceEvent = {
   time: string
   title: string
   detail: string
+}
+
+export type LogLevel = 'info' | 'success' | 'warn' | 'error'
+
+export type LogLine = {
+  id: string
+  time: string
+  level: LogLevel
+  source: string
+  message: string
 }

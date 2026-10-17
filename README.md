@@ -6,7 +6,7 @@
 
 **Operational interfaces, without the visual debt.**
 
-A dense, calm design system for dashboards, device management, settings and telemetry.
+A dense, calm design system for dashboards, device management, settings and telemetry, with a live incident simulator.
 
 [Live demo](https://anilams.github.io/lattice-ui/) · [Components](docs/components.md) · [Registry](docs/registry.md) · [Design rules](DESIGN.md) · [Changelog](CHANGELOG.md) · [中文](README.zh-CN.md)
 
@@ -15,9 +15,9 @@ A dense, calm design system for dashboards, device management, settings and tele
 [![License: MIT](https://img.shields.io/badge/license-MIT-4797FF.svg)](LICENSE)
 [![React 19](https://img.shields.io/badge/React-19-20232A.svg)](https://react.dev/)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-0B1120.svg)](https://tailwindcss.com/)
-[![Registry 37](https://img.shields.io/badge/registry-37_items-37BE5F.svg)](docs/registry.md)
+[![Registry 43](https://img.shields.io/badge/registry-43_items-37BE5F.svg)](docs/registry.md)
 
-<sub>v0.1 preview · public demo + preview registry · React 19 · TypeScript 7 · Tailwind CSS 4 · Radix UI</sub>
+<sub>v0.2.0 preview · live incident simulation · public demo + preview registry</sub>
 
 </div>
 
@@ -32,20 +32,20 @@ Operational software has a different job from a marketing page. It has to be sca
 | **Console-first density** | A 30 px control height, 38 px rows and tabular numerals are the default, with a roomy mode for forms and reading. |
 | **Source you can own** | Components are copied into your project through a shadcn-style registry. Edit the source, keep the tokens, keep the behavior. |
 | **Two themes, two densities** | Dark and light are full semantic swaps. Compact and roomy change component dimensions without changing the type scale. |
-| **Domain blocks, not just buttons** | FilterPanel, DataTable, DetailPanel, TrafficPanel, TopologyMap, SettingsSection and AppShell solve the screens this category repeats. |
+| **Domain blocks, not just buttons** | TopologyWorkbench, PortMatrix, LogStream, FilterPanel, DataTable, DetailPanel, TrafficPanel, SettingsSection and AppShell solve the screens this category repeats. |
 | **Accessibility as behavior** | Radix primitives, visible focus, focus restoration, Escape ordering, reduced motion, keyboard-inspectable charts and explicit empty states. |
 | **No charting dependency** | The traffic chart and topology map are dependency-free SVG/HTML, so the visual system stays inspectable and portable. |
 
 ## What's inside
 
-The repository contains 37 registry items and four reference pages.
+The repository contains 43 registry items and seven reference pages.
 
 | Layer | Included |
 |---|---|
 | Foundations | Theme tokens, light/dark modes, compact/roomy density, utilities and console types |
-| Primitives | Button, IconButton, Badge, StatusDot, Panel, Input, Checkbox, Switch, Tabs, Tooltip, DropdownMenu, Select, Dialog, Sheet, Separator, Skeleton, InlineNotice |
-| Console blocks | Brand, Page primitives, HealthStrip, DeviceGlyph, DeviceStatusBadge, Sparkline, TrafficChart, TrafficPanel, TopologyMap, FilterPanel, EmptyState, DataTable, SettingsSection, ActivityFeed, DetailPanel, AppShell |
-| Reference app | Overview, Devices, Settings and Design Foundations |
+| Primitives | Button, IconButton, Badge, StatusDot, Panel, Input, Checkbox, Switch, Tabs, Tooltip, DropdownMenu, Select, Dialog, Sheet, Separator, Skeleton, InlineNotice, Toast |
+| Console blocks | Brand, Page primitives, HealthStrip, DeviceGlyph, DeviceStatusBadge, Sparkline, TrafficChart, TrafficPanel, TopologyMap, TopologyWorkbench, FilterPanel, EmptyState, DataTable, SettingsSection, ActivityFeed, DetailPanel, LiveValue, PortMatrix, LogStream, AppShell |
+| Reference app | Overview, Topology, Devices, Ports, Logs & Alerts, Settings and Design Foundations |
 
 ## Preview
 
@@ -59,7 +59,15 @@ The repository contains 37 registry items and four reference pages.
 |---|---|
 | <img src="docs/images/dashboard-light.png" alt="Lattice UI dashboard in light mode" /> | <img src="docs/images/dashboard-mobile.png" alt="Lattice UI narrow layout" width="260" /> |
 
+| Topology incident | Port matrix | Live logs and alerts |
+|---|---|---|
+| <img src="docs/images/topology.png" alt="Topology incident inspection" /> | <img src="docs/images/ports.png" alt="Port matrix" /> | <img src="docs/images/logs.png" alt="Live logs and alerts" /> |
+
 The secondary navigation becomes a drawer below 1024 px; below 768 px the top-bar menu replaces the rail. The device table scrolls horizontally, and the detail panel is non-modal at 1280 px and above and becomes a modal sheet below that breakpoint.
+
+## Live incident demo
+
+Open **Demo** in the top bar to pause sampling, change the simulation speed, inject an AP failure or WAN degradation, recover, or reset. The same incident propagates through the overview, topology, device table, port matrix and log stream. The chart interpolates data continuously instead of remounting, and live numbers tween with reduced-motion support.
 
 ## Quick start
 
@@ -181,9 +189,9 @@ Every item is generated from the same source the app uses. No duplicate componen
 
 | Category | Items |
 |---|---|
-| Theme and libs | theme, utils, types, control |
-| UI | 17 primitives listed above |
-| Blocks | 16 console compositions listed above |
+| Theme and libs | theme, utils, types, control, motion |
+| UI | 18 primitives listed above |
+| Blocks | 20 console compositions listed above |
 
 The registry was tested with shadcn 4.21.5 for <code>button</code>, <code>data-table</code>, <code>app-shell</code> and <code>detail-panel</code>, and with a local installer for the full closure. The public Pages URLs are checked anonymously. Toolchain: Node 24 and pnpm 11.25.0. This is a preview channel; pin a version directory before promising reproducible installs. See [docs/registry.md](docs/registry.md) for the item schema, compatibility notes and release checklist.
 
@@ -196,7 +204,7 @@ src/
   styles/tokens.css      Runtime token source
   styles/lattice.css     Tailwind mapping, base styles and motion
   data/demo.ts           Fictional demo data
-  pages/                 Four reference pages
+  pages/                 Seven reference pages
 scripts/
   build-registry.mjs     Generates public/r/*.json
   install.mjs            Installs items into a consumer
@@ -212,9 +220,9 @@ The repository includes [SKILL.md](SKILL.md) for agent workflows. Copy the folde
 ## Roadmap
 
 - [x] Token system, dark/light themes and two densities
-- [x] 37 source registry items and a working local installer
+- [x] 43 source registry items and a working local installer
 - [x] shadcn CLI install path and consumer build verification
-- [x] Four-page reference console and mobile behavior
+- [x] Seven-page reference console with a live incident simulation and mobile behavior
 - [ ] Full WCAG and screen-reader audit
 - [ ] JSON-first token generation and Figma export
 - [ ] Marketing-site recipe

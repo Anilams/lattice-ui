@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "port-matrix",
+  "type": "registry:block",
+  "title": "PortMatrix",
+  "description": "Selectable port grid with status, PoE and utilization.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/live-value.json",
+    "https://anilams.github.io/lattice-ui/r/types.json",
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/port-matrix.tsx",
+      "target": "components/console/port-matrix.tsx",
+      "type": "registry:block",
+      "content": "import * as React from 'react'\nimport type { DevicePort } from './types'\nimport { cn } from '@/lib/utils'\nimport { LiveValue } from './live-value'\n\nexport function PortMatrix({\n  ports,\n  selected,\n  onSelect,\n  className,\n}: {\n  ports: DevicePort[]\n  selected?: number | null\n  onSelect?: (port: DevicePort) => void\n  className?: string\n}) {\n  if (!ports.length) {\n    return (\n      <div className={cn('rounded-[var(--lat-radius-lg)] border border-line bg-surface p-8 text-center text-[10px] text-faint', className)}>\n        未提供端口数据\n      </div>\n    )\n  }\n\n  return (\n    <div className={cn('grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-4', className)} aria-label=\"端口矩阵\">\n      {ports.map((port) => {\n        const active = port.connected && port.status !== 'disabled'\n        return (\n          <button\n            key={port.number}\n            type=\"button\"\n            aria-pressed={selected === port.number}\n            aria-label={\n              '端口 ' + port.number + '，' + (active ? '已连接 ' + (port.label || '') : '未连接')\n            }\n            onClick={() => onSelect?.(port)}\n            className={cn(\n              'group relative overflow-hidden rounded-[var(--lat-radius-md)] border bg-surface p-2.5 text-left transition-[border-color,background-color,box-shadow] duration-[var(--lat-duration-base)] ease-[var(--lat-ease-out)] hover:border-line-strong hover:bg-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action/35',\n              selected === port.number ? 'border-action/70 bg-selected' : 'border-line',\n            )}\n          >\n            <div className=\"flex items-center justify-between gap-2\">\n              <span className=\"lat-data text-[10px] text-faint\">{String(port.number).padStart(2, '0')}</span>\n              <span className=\"flex items-center gap-1 text-[8px] text-faint\">\n                {port.poe ? 'PoE' : ''}\n                <span className={cn('size-1.5 rounded-full', active ? 'bg-success' : port.status === 'disabled' ? 'bg-warning' : 'bg-line-strong')} />\n              </span>\n            </div>\n            <div className={cn('mt-2 truncate text-[11px]', active ? 'text-ink' : 'text-faint')}>\n              {active ? port.label || '已连接' : port.status === 'disabled' ? '已禁用' : '未连接'}\n            </div>\n            <div className=\"mt-0.5 flex items-center justify-between gap-2 text-[9px]\">\n              <span className=\"lat-data text-muted\">{active ? port.speed ?? '1 Gbps' : '—'}</span>\n              {active && typeof port.utilization === 'number' ? (\n                <LiveValue value={port.utilization} suffix=\"%\" className=\"text-faint\" />\n              ) : null}\n            </div>\n            {active && typeof port.utilization === 'number' ? (\n              <div className=\"mt-2 h-1 overflow-hidden rounded-full bg-raised\">\n                <div\n                  className={cn(\n                    'h-full rounded-full transition-[width] duration-[var(--lat-duration-panel)] ease-[var(--lat-ease-out)]',\n                    port.utilization > 70 ? 'bg-warning' : 'bg-action',\n                  )}\n                  style={{ width: Math.max(2, Math.min(100, port.utilization)) + '%' }}\n                />\n              </div>\n            ) : null}\n          </button>\n        )\n      })}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

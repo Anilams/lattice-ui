@@ -2,7 +2,7 @@
 name: lattice-ui
 description: Build dense operational consoles, dashboards, device lists and settings screens with the Lattice UI design system. Use when the task needs calm information hierarchy, compact tables, source-first React components, dark/light themes, or a working console pattern.
 metadata:
-  version: "0.1.0"
+  version: "0.2.0"
   homepage: "https://github.com/Anilams/lattice-ui"
 ---
 

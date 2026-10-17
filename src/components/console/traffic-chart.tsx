@@ -1,6 +1,7 @@
 import * as React from 'react'
 import type { Range, TrafficPoint } from './types'
 import { cn } from '@/lib/utils'
+import { useAnimatedNumber, useAnimatedSeries } from '@/hooks/use-motion'
 
 const timeFormatter = new Intl.DateTimeFormat('zh-CN', {
   hour: '2-digit',
@@ -24,15 +25,14 @@ function trafficLabel(range: Range, point: TrafficPoint | undefined, index: numb
 }
 
 function smoothPath(
-  data: TrafficPoint[],
-  key: 'download' | 'upload',
+  values: number[],
   width: number,
   height: number,
   max: number,
 ) {
-  const points = data.map((point, index) => {
-    const x = (index / Math.max(data.length - 1, 1)) * width
-    const y = height - (point[key] / max) * height
+  const points = values.map((value, index) => {
+    const x = (index / Math.max(values.length - 1, 1)) * width
+    const y = height - (value / max) * height
     return [x, y] as const
   })
   return points
@@ -60,6 +60,16 @@ export function TrafficChart({
   const id = React.useId().replace(/:/g, '')
   const width = 1000
   const height = 210
+  const downloadTargets = React.useMemo(() => data.map((point) => point.download), [data])
+  const uploadTargets = React.useMemo(() => data.map((point) => point.upload), [data])
+  const downloadValues = useAnimatedSeries(downloadTargets, 850)
+  const uploadValues = useAnimatedSeries(uploadTargets, 850)
+  const targetMax = Math.max(
+    30,
+    Math.ceil(Math.max(...data.map((point) => Math.max(point.download, point.upload)), 1) / 30) * 30,
+  )
+  const animatedMax = useAnimatedNumber(targetMax)
+  const max = Math.max(30, Math.round(animatedMax / 30) * 30)
   if (!data.length) {
     return (
       <div className="flex h-[210px] items-center justify-center text-[10px] text-faint">
@@ -67,15 +77,9 @@ export function TrafficChart({
       </div>
     )
   }
-  const max = Math.max(
-    30,
-    Math.ceil(
-      Math.max(...data.map((point) => Math.max(point.download, point.upload))) / 30,
-    ) * 30,
-  )
   const ticks = [1, 0.75, 0.5, 0.25, 0]
-  const downloadPath = smoothPath(data, 'download', width, height, max)
-  const uploadPath = smoothPath(data, 'upload', width, height, max)
+  const downloadPath = smoothPath(downloadValues, width, height, max)
+  const uploadPath = smoothPath(uploadValues, width, height, max)
   const downloadArea = downloadPath + ' L ' + width + ' ' + height + ' L 0 ' + height + ' Z'
   const uploadArea = uploadPath + ' L ' + width + ' ' + height + ' L 0 ' + height + ' Z'
   const hoverPoint = hover === null ? null : data[hover]

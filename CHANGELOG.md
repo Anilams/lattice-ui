@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.2.0 — 2026-10-17
+
+Live incident preview.
+
+### Added
+
+- Shared demo control plane with deterministic telemetry, connection state, commands and incident recovery.
+- Continuous animated traffic chart, live numeric values, pause/resume and a simulated clock.
+- Topology workbench with pan, zoom, node selection, an inspector and animated links.
+- Ports page with selectable port matrix, PoE, utilization and enable/disable commands.
+- Logs and alerts page with live tail, severity filters, search, export and alert acknowledgement.
+- Demo controls for pause, speed, AP failure, WAN degradation and reset.
+- Toast provider, LiveValue, PortMatrix, LogStream, TopologyWorkbench and motion hooks.
+- Registry expanded to 43 items, with absolute public dependency URLs.
+- Vitest coverage for telemetry ticks, incident injection, recovery commands and reset.
+
+### Changed
+
+- Device and dashboard data now read from the shared simulation store.
+- Detail data is supplied by the caller; live status, ports, events and traffic update in place.
+- Navigation includes topology, ports and logs; unfinished areas are visibly disabled instead of dead links.
+- Pages and registry now use the v0.2 token and motion behavior.
+
+### Known limitations
+
+- The preview uses a mutable /r registry channel; pinned version directories remain a follow-up.
+- WCAG, 320 px and 200% zoom audits are still outstanding.
+- React 18, Tailwind 3, Next.js SSR/RSC and non-Chromium browsers are unverified.
+
 ## 0.1.0 — 2026-10-17
 
 First public preview.

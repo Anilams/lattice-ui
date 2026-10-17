@@ -35,6 +35,9 @@ jobs:
       - name: Type check
         run: pnpm typecheck
 
+      - name: Simulation tests
+        run: pnpm test
+
       - name: Registry drift
         if: github.repository == 'Anilams/lattice-ui'
         run: |

@@ -6,7 +6,7 @@
 
 **为高密度运维界面准备的设计系统。**
 
-面向仪表盘、设备管理、设置和遥测的紧凑、克制、可复用的 React 组件。
+面向仪表盘、设备管理、设置和遥测的紧凑、克制、可复用的 React 组件，内置实时故障模拟。
 
 [在线演示](https://anilams.github.io/lattice-ui/) · [组件文档](docs/components.md) · [Registry](docs/registry.md) · [设计规则](DESIGN.md) · [更新日志](CHANGELOG.md) · [English](README.md)
 
@@ -15,9 +15,9 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-4797FF.svg)](LICENSE)
 [![React 19](https://img.shields.io/badge/React-19-20232A.svg)](https://react.dev/)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4-0B1120.svg)](https://tailwindcss.com/)
-[![Registry 37](https://img.shields.io/badge/registry-37_items-37BE5F.svg)](docs/registry.md)
+[![Registry 43](https://img.shields.io/badge/registry-43_items-37BE5F.svg)](docs/registry.md)
 
-<sub>v0.1 预览 · 公网演示 + 预览 registry · React 19 · TypeScript 7 · Tailwind CSS 4 · Radix UI</sub>
+<sub>v0.2.0 预览 · 实时故障模拟 · 公网演示 + 预览 registry</sub>
 
 </div>
 
@@ -32,20 +32,20 @@
 | **控制台优先的密度** | 默认 30 px 控件、38 px 行高和等宽数字；表单与阅读场景可切换宽松密度。 |
 | **源码归你所有** | 组件通过 shadcn 风格 registry 复制到项目，直接修改源码、保留令牌和行为。 |
 | **两套主题，两种密度** | 深色与浅色是完整的语义替换；紧凑与宽松只改变组件尺寸，不改变字号层级。 |
-| **领域组合，而不只是按钮** | FilterPanel、DataTable、DetailPanel、TrafficPanel、TopologyMap、SettingsSection 和 AppShell 覆盖这一类产品反复出现的页面。 |
+| **领域组合，而不只是按钮** | TopologyWorkbench、PortMatrix、LogStream、FilterPanel、DataTable、DetailPanel、TrafficPanel、SettingsSection 和 AppShell 覆盖这一类产品反复出现的页面。 |
 | **可访问性是行为** | Radix 原语、可见焦点、关闭后焦点恢复、Escape 层级、减少动效、键盘可检查图表和明确空态。 |
 | **不依赖图表库** | 流量图和拓扑图使用 SVG/HTML 实现，视觉系统保持可检查、可移植。 |
 
 ## 包含什么
 
-仓库包含 37 个 registry 条目和四个参考页面。
+仓库包含 43 个 registry 条目和七个参考页面。
 
 | 层级 | 内容 |
 |---|---|
 | 基础 | 主题令牌、深/浅色、紧凑/宽松密度、工具函数和控制台类型 |
-| 基础控件 | Button、IconButton、Badge、StatusDot、Panel、Input、Checkbox、Switch、Tabs、Tooltip、DropdownMenu、Select、Dialog、Sheet、Separator、Skeleton、InlineNotice |
-| 控制台组合 | Brand、页面原语、HealthStrip、DeviceGlyph、DeviceStatusBadge、Sparkline、TrafficChart、TrafficPanel、TopologyMap、FilterPanel、EmptyState、DataTable、SettingsSection、ActivityFeed、DetailPanel、AppShell |
-| 参考应用 | 概览、设备、设置、设计基础 |
+| 基础控件 | Button、IconButton、Badge、StatusDot、Panel、Input、Checkbox、Switch、Tabs、Tooltip、DropdownMenu、Select、Dialog、Sheet、Separator、Skeleton、InlineNotice、Toast |
+| 控制台组合 | Brand、页面原语、HealthStrip、DeviceGlyph、DeviceStatusBadge、Sparkline、TrafficChart、TrafficPanel、TopologyMap、TopologyWorkbench、FilterPanel、EmptyState、DataTable、SettingsSection、ActivityFeed、DetailPanel、LiveValue、PortMatrix、LogStream、AppShell |
+| 参考应用 | 概览、拓扑、设备、端口、日志与告警、设置、设计基础 |
 
 ## 预览
 
@@ -59,7 +59,15 @@
 |---|---|
 | <img src="docs/images/dashboard-light.png" alt="Lattice UI 浅色仪表盘" /> | <img src="docs/images/dashboard-mobile.png" alt="Lattice UI 窄屏布局" width="260" /> |
 
+| 拓扑故障 | 端口矩阵 | 实时日志与告警 |
+|---|---|---|
+| <img src="docs/images/topology.png" alt="拓扑故障定位" /> | <img src="docs/images/ports.png" alt="端口矩阵" /> | <img src="docs/images/logs.png" alt="实时日志与告警" /> |
+
 二级导航在 1024 px 以下变成抽屉；768 px 以下顶栏菜单取代图标栏。设备表横向滚动，详情面板在 1280 px 及以上保持非模态，低于该断点转换为模态 Sheet。
+
+## 实时故障演示
+
+点击顶栏的“演示”可以暂停采样、调整模拟速度、注入 AP 离线或 WAN 拥塞、恢复或重置。同一次故障会同步出现在概览、拓扑、设备表、端口矩阵和日志流中。图表使用连续插值而不是整图重绘，实时数字也支持 reduced-motion。
 
 ## 快速开始
 
@@ -181,9 +189,9 @@ document.documentElement.dataset.density = density // compact | roomy
 
 | 类别 | 条目 |
 |---|---|
-| 主题与工具 | theme、utils、types、control |
-| 基础控件 | 上表中的 17 个 UI 原语 |
-| 组合组件 | 上表中的 16 个控制台组合 |
+| 主题与工具 | theme、utils、types、control、motion |
+| 基础控件 | 上表中的 18 个 UI 原语 |
+| 组合组件 | 上表中的 20 个控制台组合 |
 
 已使用 shadcn 4.21.5 验证 <code>button</code>、<code>data-table</code>、<code>app-shell</code> 和 <code>detail-panel</code>，并使用本地安装器验证完整闭包；公网 Pages URL 已做匿名访问检查和实际安装。工具链为 Node 24、pnpm 11.25.0。当前是可变的预览通道，在承诺可复现安装前需要固定版本目录。条目格式、兼容性说明和发布清单见 [docs/registry.md](docs/registry.md)。
 
@@ -196,7 +204,7 @@ src/
   styles/tokens.css      运行时令牌源
   styles/lattice.css     Tailwind 映射、基础样式和动效
   data/demo.ts           虚构演示数据
-  pages/                 四个参考页面
+  pages/                 七个参考页面
 scripts/
   build-registry.mjs     生成 public/r/*.json
   install.mjs            安装到接入项目
@@ -212,9 +220,9 @@ docs/                    组件、registry 与证据文档
 ## 路线图
 
 - [x] 令牌系统、深/浅主题和两种密度
-- [x] 37 个源码 registry 条目和可工作的本地安装器
+- [x] 43 个源码 registry 条目和可工作的本地安装器
 - [x] shadcn CLI 安装路径与接入项目构建验证
-- [x] 四页参考控制台和移动端行为
+- [x] 七页参考控制台、实时故障模拟和移动端行为
 - [ ] 完整 WCAG 与屏幕阅读器验收
 - [ ] JSON-first 令牌生成和 Figma 导出
 - [ ] 官网营销页面配方

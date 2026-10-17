@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "live-value",
+  "type": "registry:block",
+  "title": "LiveValue",
+  "description": "Tweened numeric value for live operational metrics.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://anilams.github.io/lattice-ui/r/motion.json",
+    "https://anilams.github.io/lattice-ui/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/console/live-value.tsx",
+      "target": "components/console/live-value.tsx",
+      "type": "registry:block",
+      "content": "import * as React from 'react'\nimport { useAnimatedNumber } from '@/hooks/use-motion'\nimport { cn } from '@/lib/utils'\n\nexport function LiveValue({\n  value,\n  decimals = 0,\n  suffix,\n  className,\n}: {\n  value: number\n  decimals?: number\n  suffix?: string\n  className?: string\n}) {\n  const animated = useAnimatedNumber(value)\n  const formatted = new Intl.NumberFormat('zh-CN', {\n    minimumFractionDigits: decimals,\n    maximumFractionDigits: decimals,\n  }).format(animated)\n\n  return (\n    <span className={cn('lat-tabular', className)}>\n      {formatted}\n      {suffix ? <span className=\"ml-0.5 text-[0.7em] font-normal text-muted\">{suffix}</span> : null}\n    </span>\n  )\n}\n"
+    }
+  ]
+}
