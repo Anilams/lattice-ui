@@ -96,3 +96,5 @@ Computed-style frequency is not a design specification. Inherited values and off
 Planning and an implementation review were requested through the subagent interface with the model override Krill/gpt-6-astra. The subagent returned a planning review and reported the model marker gpt-6-astra. No independent provider or route evidence was obtained, so this is recorded as a model-assisted review and not as verified Krill routing. The main model made the final implementation decisions, ran the checks and owns the result.
 
 A follow-up review found two remaining blockers: the topology empty-state dependency was missing from the registry, and mobile navigation links bypassed focus restoration. Both were fixed; standalone topology installation and mobile link-focus behavior were retested.
+
+A publication review found that an uppercase owner in the registry base URL could create drift; the generator now normalizes the hostname, and the CI and Pages workflows also lowercase the owner. The final review reported no remaining v0.1 public-preview release blockers.
