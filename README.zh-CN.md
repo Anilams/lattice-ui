@@ -55,6 +55,10 @@
 |---|---|
 | <img src="docs/images/devices.png" alt="带筛选的设备表格" /> | <img src="docs/images/device-detail.png" alt="非模态设备详情面板" /> |
 
+| 浅色主题 | 窄屏布局 |
+|---|---|
+| <img src="docs/images/dashboard-light.png" alt="Lattice UI 浅色仪表盘" /> | <img src="docs/images/dashboard-mobile.png" alt="Lattice UI 窄屏布局" width="260" /> |
+
 二级导航在 1024 px 以下变成抽屉；768 px 以下顶栏菜单取代图标栏。设备表横向滚动，详情面板在 1280 px 及以上保持非模态，低于该断点转换为模态 Sheet。
 
 ## 快速开始

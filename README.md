@@ -55,6 +55,10 @@ The repository contains 37 registry items and four reference pages.
 |---|---|
 | <img src="docs/images/devices.png" alt="Device table with filters" /> | <img src="docs/images/device-detail.png" alt="Non-modal device detail panel" /> |
 
+| Light theme | Narrow layout |
+|---|---|
+| <img src="docs/images/dashboard-light.png" alt="Lattice UI dashboard in light mode" /> | <img src="docs/images/dashboard-mobile.png" alt="Lattice UI narrow layout" width="260" /> |
+
 The secondary navigation becomes a drawer below 1024 px; below 768 px the top-bar menu replaces the rail. The device table scrolls horizontally, and the detail panel is non-modal at 1280 px and above and becomes a modal sheet below that breakpoint.
 
 ## Quick start
